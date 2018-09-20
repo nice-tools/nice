@@ -184,7 +184,8 @@ class BaseMeasure(BaseContainer):
                              'why we will not tolerate these things')
         if len(axis_to_preserve) > 0:
             permutation_list += removed_axis
-        logger.info('Reduction order: {}'.format(permutation_axes))
+        logger.info('Reduction order for {}: {}'.format(
+            self._get_title(), permutation_axes))
         data = np.transpose(data, permutation_list)
         return data, funcs
 
