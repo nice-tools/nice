@@ -17,7 +17,8 @@
 # You can be released from the requirements of the license by purchasing a
 # commercial license. Buying such a license is mandatory as soon as you
 # develop commercial activities as mentioned in the GNU Affero General Public
-# License version 3 without disclosing the source code of your own applications.
+# License version 3 without disclosing the source code of your own
+# applications.
 #
 import numpy as np
 
@@ -172,6 +173,7 @@ def test_pe():
     pe_2, symb_2 = epochs_compute_pe(epochs, kernel=3, tau=8, backend='c')
     assert_almost_equal(pe_1, pe_2)
     assert_almost_equal(pe_1, pe_2)
+
 
 if __name__ == "__main__":
     import nose

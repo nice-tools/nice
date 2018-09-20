@@ -17,7 +17,8 @@
 # You can be released from the requirements of the license by purchasing a
 # commercial license. Buying such a license is mandatory as soon as you
 # develop commercial activities as mentioned in the GNU Affero General Public
-# License version 3 without disclosing the source code of your own applications.
+# License version 3 without disclosing the source code of your own
+# applications.
 #
 from copy import deepcopy
 from collections import OrderedDict
@@ -108,7 +109,8 @@ def _read_power_spectral(cls, fname, estimators=None, comment='default'):
 
 
 class PowerSpectralDensityEstimator(BaseContainer):
-    def __init__(self, tmin, tmax, fmin, fmax, psd_method, psd_params, comment):
+    def __init__(self, tmin, tmax, fmin, fmax, psd_method, psd_params,
+                 comment):
         BaseContainer.__init__(self, comment=comment)
         self.psd_method = psd_method
         self.psd_params = deepcopy(psd_params)
@@ -226,8 +228,8 @@ def read_psd(fname, estimators=None, comment='default'):
 class PowerSpectralDensitySummary(BasePowerSpectralDensity):
     """docstring for PSD"""
 
-    def __init__(self, percentile, estimator=None, tmin=None, tmax=None, fmin=0,
-                 fmax=np.inf, comment='default'):
+    def __init__(self, percentile, estimator=None, tmin=None, tmax=None,
+                 fmin=0, fmax=np.inf, comment='default'):
         BasePowerSpectralDensity.__init__(
             self, tmin=tmin, tmax=tmax, fmin=fmin, fmax=fmax,
             estimator=estimator, comment=comment)
