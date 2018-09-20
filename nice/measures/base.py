@@ -167,13 +167,16 @@ class BaseMeasure(BaseContainer):
                 reduction_func = [i for i in reduction_func
                                   if i['axis'] not in axis_to_preserve]
         permutation_list = list()
+        permutation_axes = list()
         if reduction_func is None:
-            for remaining_axis in _axis_map.values():
-                permutation_list.append(remaining_axis)
+            for ax_name, remaining_axis in _axis_map.items():
+                permutation_axes.append(remaining_axis)
+                permutation_list.append(ax_name)
                 funcs.append(np.mean)
         elif len(reduction_func) == len(_axis_map):
             for rec in reduction_func:
                 this_axis = _axis_map.pop(rec['axis'])
+                permutation_axes.append(rec['axis'])
                 permutation_list.append(this_axis)
                 funcs.append(rec['function'])
         else:
@@ -181,7 +184,7 @@ class BaseMeasure(BaseContainer):
                              'why we will not tolerate these things')
         if len(axis_to_preserve) > 0:
             permutation_list += removed_axis
-
+        logger.info('Reduction order: {}'.format(permutation_axes))
         data = np.transpose(data, permutation_list)
         return data, funcs
 
