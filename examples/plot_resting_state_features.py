@@ -1,3 +1,34 @@
+"""
+
+==================================================
+Apply DOC-Forest recipe to single subject BCI data
+==================================================
+
+Here we use the resting state DOC-Forest [1] recipe to analyze BCI data.
+Compared to the original reference, 2 major modifications are done.
+
+1) For simplicity, we only compute 1 feature per marker, not 4
+2) For speed, we use 200 trees, not 2000.
+
+Compared to the common spatial patterns example form the MNE website,
+the result is not particularly impressive. This is because a
+global statistic like the mean or the standard deviation are a good
+abstraction for severly brain injured patients but not for different
+conditions in a BCI experiment conducted with healthy participants.
+
+
+References
+----------
+[1] Engemann D.A., Raimondo F., King JR., Rohaut B., Louppe G., Faugeras F.,
+    Annen J., Cassol H., Gosseries O., Fernandez-Slezak D., Laureys S.,
+    Naccache L., Dehaene S. and Sitt J.D. (in press).
+    Robust EEG-based cross-site and cross-protocol classification of
+    states of consciousness (in press). Brain.
+"""
+
+# Authors: Denis A. Engemann <denis.engemann@gmail.com>
+#          Federico Raimondo <federaimondo@gmail.com>
+
 import numpy as np
 import mne
 
@@ -18,7 +49,6 @@ from nice.measures import (PowerSpectralDensity,
                            SymbolicMutualInformation,
                            PowerSpectralDensitySummary,
                            PowerSpectralDensityEstimator)
-
 
 # avoid classification of evoked responses by using epochs that start 1s after
 # cue onset.
@@ -51,13 +81,22 @@ epochs = mne.Epochs(
 
 psds_params = dict(n_fft=4096, n_overlap=100, n_jobs='auto', nperseg=128)
 
+
+##############################################################################
+# Prepare markers
+
+backend = 'python'  # This gives maximum compatibility across platforms.
+# For improved speed, checkout the optimization options using C extensions.
+
+# We define one base estimator to avoid recomputation when looking up markers.
 base_psd = PowerSpectralDensityEstimator(
     psd_method='welch', tmin=None, tmax=None, fmin=1., fmax=45.,
     psd_params=psds_params, comment='default')
 
-backend = 'python'
 
-features = [
+# Here are the resting-state compatible markers we considered in the paper.
+
+features = Features([
     PowerSpectralDensity(estimator=base_psd, fmin=1., fmax=4.,
                          normalize=False, comment='delta'),
     PowerSpectralDensity(estimator=base_psd, fmin=1., fmax=4.,
@@ -95,11 +134,19 @@ features = [
 
     KolmogorovComplexity(tmin=None, tmax=0.6, backend=backend,
                          method_params={'nthreads': 'auto'}),
-]
+])
 
-# prepare reductions
-channels_fun = np.mean
+##############################################################################
+# Prepare reductions.
+# Keep in mind that this is BCI, we have some localized effects.
+# Therefore we will consider the standard deviation acros channels.
+# Contraty to the paper, this is a single subject analysis. We therefore do
+# not pefrorm a full reduction but only compute one statistic
+# per marker and per epoch. In the paper, instead, we computed summaries over
+# epochs and sensosrs, yielding one value per marker per EEG recoding.
+
 epochs_fun = np.mean
+channels_fun = np.std
 reduction_params = {
     'PowerSpectralDensity': {
         'reduction_func': [
@@ -132,10 +179,10 @@ reduction_params = {
 
 X = np.empty((len(epochs), len(features)))
 for ii in range(len(epochs)):
-    my_features = Features(features)
-    my_features.fit(epochs[ii])
-    X[ii, :] = my_features.reduce_to_scalar(measure_params=reduction_params)
-    for measure in my_features.values():
+    features.fit(epochs[ii])
+    X[ii, :] = features.reduce_to_scalar(measure_params=reduction_params)
+    # XXX hide this inside code
+    for measure in features.values():
         delattr(measure, 'data_')
     delattr(base_psd, 'data_')
 
@@ -144,7 +191,8 @@ y = epochs.events[:, 2] - 2
 ##############################################################################
 # Original DOC-Forest recipe
 
-n_estimators = 2000  # this will take some time.
+# NOTE: It was 2000 in the paper. Bnut we want to save time.
+n_estimators = 200
 doc_forest = make_pipeline(
     RobustScaler(),
     ExtraTreesClassifier(
@@ -158,16 +206,18 @@ aucs = cross_val_score(
     X=X, y=y, estimator=doc_forest,
     scoring='roc_auc', cv=cv, groups=np.arange(len(epochs)))
 
-
-# Let's inspect variable importances, for convenience we fit in-sample.
+##############################################################################
+# Inspect variable importances
+# We will use, for convenience, the in-sample fit.
 # In the paper we sometimes looked at the distributions across CV-folds.
+
 
 doc_forest.fit(X, y)
 variable_importance = doc_forest.steps[-1][-1].feature_importances_
 sorter = variable_importance.argsort()
 
 # shorten the names a bit.
-var_names = list(my_features.keys())
+var_names = list(features.keys())
 var_names = [var_names[ii].lstrip('nice/measure/') for ii in sorter]
 
 # let's plot it
