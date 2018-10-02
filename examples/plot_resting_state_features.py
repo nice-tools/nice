@@ -1,14 +1,16 @@
+import numpy as np
 import mne
 
 from mne.io import concatenate_raws, read_raw_edf
 from mne.datasets import eegbci
 
 from nice import Features
-from nice.measures import (PowerSpectralDensity, ContingentNegativeVariation,
-                           KolmogorovComplexity, PermutationEntropy,
-                           SymbolicMutualInformation, TimeLockedTopography,
-                           TimeLockedContrast, PowerSpectralDensitySummary,
-                           WindowDecoding, PowerSpectralDensityEstimator)
+from nice.measures import (PowerSpectralDensity,
+                           KolmogorovComplexity,
+                           PermutationEntropy,
+                           SymbolicMutualInformation,
+                           PowerSpectralDensitySummary,
+                           PowerSpectralDensityEstimator)
 
 
 # avoid classification of evoked responses by using epochs that start 1s after
@@ -66,7 +68,6 @@ features = Features([
                          normalize=False, comment='gamma'),
     PowerSpectralDensity(estimator=base_psd, fmin=30., fmax=45.,
                          normalize=True, comment='gamman'),
-
     PowerSpectralDensity(estimator=base_psd, fmin=1., fmax=45.,
                          normalize=True, comment='summary_se'),
     PowerSpectralDensitySummary(estimator=base_psd, fmin=1., fmax=45.,
@@ -88,6 +89,42 @@ features = Features([
                          method_params={'nthreads': 'auto'}),
 ])
 
-features.fit(epochs)
 
+# prepare reductions
+channels_fun = np.mean
+epochs_fun = np.mean
+reduction_params = {
+    'PowerSpectralDensity': {
+        'reduction_func': [
+            {'axis': 'frequency', 'function': np.sum},
+            {'axis': 'epochs', 'function': epochs_fun},
+            {'axis': 'channels', 'function': channels_fun}]
+    },
+    'PowerSpectralDensitySummary': {
+        'reduction_func': [
+            {'axis': 'epochs', 'function': epochs_fun},
+            {'axis': 'channels', 'function': channels_fun}]
+    },
+    'SymbolicMutualInformation': {
+        'reduction_func': [
+            {'axis': 'epochs', 'function': epochs_fun},
+            {'axis': 'channels', 'function': channels_fun},
+            {'axis': 'channels_y', 'function': channels_fun}]
+    },
+    'PermutationEntropy': {
+        'reduction_func': [
+            {'axis': 'epochs', 'function': epochs_fun},
+            {'axis': 'channels', 'function': channels_fun}]
+    },
+    'KolmogorovComplexity': {
+        'reduction_func': [
+            {'axis': 'epochs', 'function': epochs_fun},
+            {'axis': 'channels', 'function': channels_fun}]
+    }
+}
+
+X = np.empty((len(epochs), len(features)))
+for ii in range(len(epochs)):
+    features.fit(epochs[ii])
+    X[ii] = features.reduce_to_scalar(measure_params=reduction_params)
 
