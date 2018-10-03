@@ -24,14 +24,14 @@ import mne
 
 from nice import Markers
 from nice.markers import (PowerSpectralDensity,
-                           KolmogorovComplexity,
-                           PermutationEntropy,
-                           SymbolicMutualInformation,
-                           PowerSpectralDensitySummary,
-                           PowerSpectralDensityEstimator,
-                           ContingentNegativeVariation,
-                           TimeLockedTopography,
-                           TimeLockedContrast)
+                          KolmogorovComplexity,
+                          PermutationEntropy,
+                          SymbolicMutualInformation,
+                          PowerSpectralDensitySummary,
+                          PowerSpectralDensityEstimator,
+                          ContingentNegativeVariation,
+                          TimeLockedTopography,
+                          TimeLockedContrast)
 
 
 fname = 'data/JSXXX-epo.fif'

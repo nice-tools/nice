@@ -44,11 +44,11 @@ import matplotlib.pyplot as plt
 
 from nice import Markers
 from nice.markers import (PowerSpectralDensity,
-                           KolmogorovComplexity,
-                           PermutationEntropy,
-                           SymbolicMutualInformation,
-                           PowerSpectralDensitySummary,
-                           PowerSpectralDensityEstimator)
+                          KolmogorovComplexity,
+                          PermutationEntropy,
+                          SymbolicMutualInformation,
+                          PowerSpectralDensitySummary,
+                          PowerSpectralDensityEstimator)
 
 # avoid classification of evoked responses by using epochs that start 1s after
 # cue onset.
