@@ -23,6 +23,7 @@ References
 
 import numpy as np
 from scipy.stats import trim_mean
+import os.path as op
 
 import mne
 
@@ -45,7 +46,11 @@ def entropy(a, axis=0):
     return -np.nansum(a * np.log(a), axis=axis) / np.log(a.shape[axis])
 
 
-fc = read_features('JSXXX-features.hdf5')
+fname = 'data/JSXXX-markers.hdf5'
+if not op.exists(fname):
+    raise ValueError('Please run compute_doc_forest_markers.py example first')
+
+fc = read_features(fname)
 
 reduction_params = {}
 scalp_roi = np.arange(224)

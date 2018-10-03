@@ -19,6 +19,7 @@ References
 # Authors: Denis A. Engemann <denis.engemann@gmail.com>
 #          Federico Raimondo <federaimondo@gmail.com>
 
+import os.path as op
 import mne
 
 from nice import Features
@@ -32,8 +33,14 @@ from nice.measures import (PowerSpectralDensity,
                            TimeLockedTopography,
                            TimeLockedContrast)
 
-# TODO: GET URL?
-fname = '/Users/fraimondo/ownCloud/ULG/Data/LG_Controls/JSXXX-epo.fif'
+
+fname = 'data/JSXXX-epo.fif'
+if not op.exists(fname):
+    print('File not present, downloading...')
+    import urllib.request
+    url = 'https://ndownloader.figshare.com/files/13179518'
+    urllib.request.urlretrieve(url, fname)
+    print('Download complete')
 
 epochs = mne.read_epochs(fname, preload=True)
 
@@ -43,7 +50,7 @@ psds_params = dict(n_fft=4096, n_overlap=100, n_jobs='auto', nperseg=128)
 base_psd = PowerSpectralDensityEstimator(
     psd_method='welch', tmin=None, tmax=0.6, fmin=1., fmax=45.,
     psd_params=psds_params, comment='default')
-f_list = [
+m_list = [
     PowerSpectralDensity(estimator=base_psd, fmin=1., fmax=4.,
                          normalize=False, comment='delta'),
     PowerSpectralDensity(estimator=base_psd, fmin=1., fmax=4.,
@@ -112,7 +119,7 @@ f_list = [
                        condition_b=['LSGS', 'LDGS'], comment='p3b')
 ]
 
-fc = Features(f_list)
+mc = Features(m_list)
 
-fc.fit(epochs)
-fc.save('JSXXX-features.hdf5')
+mc.fit(epochs)
+mc.save('data/JSXXX-markers.hdf5')
