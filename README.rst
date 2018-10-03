@@ -52,10 +52,18 @@ To use wSMI with CSD you need pycsd: https://github.com/nice-tools/pycsd/
 Optimizations
 ^^^^^^^^^^^^^
 
-Aditionally, we ship optimized versions of some algorithms. To build, just
-go to the nice soure code directory and do::
+Aditionally, we ship optimized versions of some algorithms.
+They can be compiled using the conda CLANG and openmp.
+Both can be installed as follows::
 
-    make
+    conda install clang
+    conda install openmp
+
+
+To build, go to the nice soure code directory and do::
+
+    CC=clang make
+
 
 Running the test suite
 ^^^^^^^^^^^^^^^^^^^^^^
