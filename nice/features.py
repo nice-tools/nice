@@ -114,9 +114,9 @@ class Features(OrderedDict):
                 meas.compress(reduction_func)
 
     def save(self, fname, overwrite=False):
-        if not fname.endswith('_features.hdf5'):
+        if not fname.endswith('-features.hdf5'):
             logger.warning('Feature collections file name should end '
-                           'with "_features.hdf5". Some NICE feateures '
+                           'with "-features.hdf5". Some NICE features '
                            'might not work.')
         write_hdf5(fname, list(self.keys()), title='nice/features/order',
                    overwrite=overwrite, slash='replace')
