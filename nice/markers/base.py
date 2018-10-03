@@ -69,8 +69,8 @@ class BaseContainer(object):
         return _read_container(cls, fname, comment=comment)
 
 
-class BaseMeasure(BaseContainer):
-    """Base class for M/EEG measures"""
+class BaseMarker(BaseContainer):
+    """Base class for M/EEG markers"""
 
     def __init__(self, tmin, tmax, comment):
         BaseContainer.__init__(self, comment=comment)
@@ -79,7 +79,7 @@ class BaseMeasure(BaseContainer):
 
     @property
     def _axis_map(self):
-        raise NotImplementedError('This should be in every measure')
+        raise NotImplementedError('This should be in every marker')
 
     def fit(self, epochs):
         self._fit(epochs)
@@ -171,8 +171,8 @@ class BaseMeasure(BaseContainer):
         permutation_axes = list()
         if reduction_func is None:
             for ax_name, remaining_axis in _axis_map.items():
-                permutation_axes.append(remaining_axis)
-                permutation_list.append(ax_name)
+                permutation_list.append(remaining_axis)
+                permutation_axes.append(ax_name)
                 funcs.append(np.mean)
         elif len(reduction_func) == len(_axis_map):
             for rec in reduction_func:
@@ -191,10 +191,10 @@ class BaseMeasure(BaseContainer):
         return data, funcs
 
 
-class BaseTimeLocked(BaseMeasure):
+class BaseTimeLocked(BaseMarker):
 
     def __init__(self, tmin, tmax, comment):
-        BaseMeasure.__init__(self, tmin, tmax, comment)
+        BaseMarker.__init__(self, tmin, tmax, comment)
 
     def fit(self, epochs):
         self.ch_info_ = epochs.info
@@ -205,7 +205,7 @@ class BaseTimeLocked(BaseMeasure):
 
     def compress(self, reduction_func):
         logger.info(
-            'TimeLocked measures cannot be compressed '
+            'TimeLocked markers cannot be compressed '
             'epoch-wise ({})'.format(self._get_title()))
 
     def save(self, fname, overwrite=False):
@@ -237,9 +237,9 @@ class BaseTimeLocked(BaseMeasure):
         return _get_title(self.__class__, self.comment)
 
 
-class BaseDecoding(BaseMeasure):
+class BaseDecoding(BaseMarker):
     def __init__(self, tmin, tmax, comment):
-        BaseMeasure.__init__(self, tmin, tmax, comment)
+        BaseMarker.__init__(self, tmin, tmax, comment)
 
     def fit(self, epochs):
         self._fit(epochs)
@@ -250,8 +250,8 @@ class BaseDecoding(BaseMeasure):
 
 
 def _get_title(klass, comment):
-    if issubclass(klass, BaseMeasure):
-        kind = 'measure'
+    if issubclass(klass, BaseMarker):
+        kind = 'marker'
     elif issubclass(klass, BaseContainer):
         kind = 'container'
     else:

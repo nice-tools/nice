@@ -19,4 +19,4 @@
 # develop commercial activities as mentioned in the GNU Affero General Public
 # License version 3 without disclosing the source code of your own applications.
 #
-from . import test_features
+from . import test_collection

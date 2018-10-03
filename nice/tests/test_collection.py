@@ -33,14 +33,14 @@ import mne
 from mne.utils import _TempDir
 
 # our imports
-from nice.measures import PowerSpectralDensity
-from nice.measures import ContingentNegativeVariation
-from nice.measures import PermutationEntropy
-from nice.measures import TimeLockedTopography
-from nice.measures import TimeLockedContrast
-from nice.measures import PowerSpectralDensityEstimator
+from nice.markers import PowerSpectralDensity
+from nice.markers import ContingentNegativeVariation
+from nice.markers import PermutationEntropy
+from nice.markers import TimeLockedTopography
+from nice.markers import TimeLockedContrast
+from nice.markers import PowerSpectralDensityEstimator
 
-from nice import Features, read_features
+from nice import Markers, read_markers
 
 
 matplotlib.use('Agg')  # for testing don't use X server
@@ -84,7 +84,7 @@ def _compare_instance(inst1, inst2):
 
 
 def test_collecting_feature():
-    """Test computation of spectral measures"""
+    """Test computation of spectral markers"""
     epochs = _get_data()[:2]
     psds_params = dict(n_fft=4096, n_overlap=100, n_jobs='auto',
                        nperseg=128)
@@ -92,7 +92,7 @@ def test_collecting_feature():
         tmin=None, tmax=None, fmin=1., fmax=45., psd_method='welch',
         psd_params=psds_params, comment='default'
     )
-    measures = [
+    markers_list = [
         PowerSpectralDensity(estimator=estimator, fmin=1, fmax=4),
         ContingentNegativeVariation(),
         TimeLockedTopography(tmin=0.1, tmax=0.2),
@@ -102,25 +102,25 @@ def test_collecting_feature():
                            condition_b='b', comment='another_erp')
     ]
 
-    features = Features(measures)
+    markers = Markers(markers_list)
     # check states and names
-    for name, measure in features.items():
-        assert_true(not any(k.endswith('_') for k in vars(measure)))
-        assert_equal(name, measure._get_title())
+    for name, marker in markers.items():
+        assert_true(not any(k.endswith('_') for k in vars(marker)))
+        assert_equal(name, marker._get_title())
 
     # check order
-    assert_equal(list(features.values()), measures)
+    assert_equal(list(markers.values()), markers_list)
 
     # check fit
-    features.fit(epochs)
-    for measure in measures:
-        assert_true(any(k.endswith('_') for k in vars(measure)))
+    markers.fit(epochs)
+    for marker in markers:
+        assert_true(any(k.endswith('_') for k in vars(markers_list)))
 
     tmp = _TempDir()
-    tmp_fname = tmp + '/test_features.hdf5'
-    features.save(tmp_fname)
-    features2 = read_features(tmp_fname)
-    for ((k1, v1), (k2, v2)) in zip(features.items(), features2.items()):
+    tmp_fname = tmp + '/test_markers.hdf5'
+    markers.save(tmp_fname)
+    markers2 = read_markers(tmp_fname)
+    for ((k1, v1), (k2, v2)) in zip(markers.items(), markers2.items()):
         assert_equal(k1, k2)
         assert_equal(
             {k: v for k, v in vars(v1).items() if not k.endswith('_') and
@@ -128,13 +128,13 @@ def test_collecting_feature():
             {k: v for k, v in vars(v2).items() if not k.endswith('_') and
              not k == 'estimator'})
     pe = PermutationEntropy().fit(epochs)
-    features._add_measure(pe)
+    markers._add_marker(pe)
 
     tmp = _TempDir()
-    tmp_fname = tmp + '/test_features.hdf5'
-    features.save(tmp_fname)
-    features3 = read_features(tmp_fname)
-    assert_true(pe._get_title() in features3)
+    tmp_fname = tmp + '/test_markers.hdf5'
+    markers.save(tmp_fname)
+    markers3 = read_markers(tmp_fname)
+    assert_true(pe._get_title() in markers3)
 
 
 if __name__ == "__main__":

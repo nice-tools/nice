@@ -22,8 +22,8 @@ References
 import os.path as op
 import mne
 
-from nice import Features
-from nice.measures import (PowerSpectralDensity,
+from nice import Markers
+from nice.markers import (PowerSpectralDensity,
                            KolmogorovComplexity,
                            PermutationEntropy,
                            SymbolicMutualInformation,
@@ -119,7 +119,7 @@ m_list = [
                        condition_b=['LSGS', 'LDGS'], comment='p3b')
 ]
 
-mc = Features(m_list)
+mc = Markers(m_list)
 
 mc.fit(epochs)
 mc.save('data/JSXXX-markers.hdf5')

@@ -23,7 +23,7 @@
 
 __version__ = '0.1.dev'
 
-from . import measures
+from . import markers
 from . import externals
-from . features import Features
-from . features import read_features
+from . collection import Markers
+from . collection import read_markers

@@ -21,17 +21,17 @@
 # applications.
 #
 from collections import OrderedDict
-from .base import BaseMeasure
+from .base import BaseMarker
 from ..algorithms.information_theory import (epochs_compute_komplexity,
                                              epochs_compute_pe)
 
 
-class KolmogorovComplexity(BaseMeasure):
+class KolmogorovComplexity(BaseMarker):
     """docstring for ContingentNegativeVariation"""
 
     def __init__(self, tmin=None, tmax=None, backend="python", nbins=32,
                  method_params=None, comment='default'):
-        BaseMeasure.__init__(self, tmin, tmax, comment)
+        BaseMarker.__init__(self, tmin, tmax, comment)
         if method_params is None:
             method_params = {}
 
@@ -58,12 +58,12 @@ def read_komplexity(fname, comment='default'):
     return KolmogorovComplexity._read(fname, comment=comment)
 
 
-class PermutationEntropy(BaseMeasure):
+class PermutationEntropy(BaseMarker):
     """docstring for PermutationEntropy"""
 
     def __init__(self, tmin=None, tmax=None, kernel=3, tau=8, backend="python",
                  comment='default', method_params=None):
-        BaseMeasure.__init__(self, tmin, tmax, comment)
+        BaseMarker.__init__(self, tmin, tmax, comment)
         self.kernel = kernel
         self.tau = tau
         self.backend = backend

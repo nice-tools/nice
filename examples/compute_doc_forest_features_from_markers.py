@@ -1,10 +1,10 @@
 """
 
 ==================================================
-Compute features used for DOC-Forest recipe
+Compute markers used for DOC-Forest recipe
 ==================================================
 
-Here we compute the features from previously computed markers as published [1].
+Here we compute the markers from previously computed markers as published [1].
 
 For simplicity, we only compute scalars using a trimmed mean (80%) accross
 epochs and the mean across channels.
@@ -27,7 +27,7 @@ import os.path as op
 
 import mne
 
-from nice.features import read_features
+from nice.markers import read_markers
 
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
@@ -50,7 +50,7 @@ fname = 'data/JSXXX-markers.hdf5'
 if not op.exists(fname):
     raise ValueError('Please run compute_doc_forest_markers.py example first')
 
-fc = read_features(fname)
+fc = read_markers(fname)
 
 reduction_params = {}
 scalp_roi = np.arange(224)
@@ -176,11 +176,11 @@ reduction_params['TimeLockedContrast/p3a'] = {
 scalars = fc.reduce_to_scalar(reduction_params)
 topos = fc.reduce_to_topo(reduction_params)
 
-to_plot = ['nice/measure/PowerSpectralDensity/deltan',
-           'nice/measure/PowerSpectralDensity/thetan',
-           'nice/measure/PowerSpectralDensity/alphan',
-           'nice/measure/PowerSpectralDensity/betan',
-           'nice/measure/PowerSpectralDensity/gamman']
+to_plot = ['nice/marker/PowerSpectralDensity/deltan',
+           'nice/marker/PowerSpectralDensity/thetan',
+           'nice/marker/PowerSpectralDensity/alphan',
+           'nice/marker/PowerSpectralDensity/betan',
+           'nice/marker/PowerSpectralDensity/gamman']
 
 idx = [list(fc.keys()).index(x) for x in to_plot]
 names = [x.split('/')[-1] for x in to_plot]

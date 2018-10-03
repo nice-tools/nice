@@ -27,7 +27,7 @@ import numpy as np
 from mne.utils import _time_mask
 from mne.io.pick import pick_types
 
-from .base import BaseMeasure, BaseTimeLocked
+from .base import BaseMarker, BaseTimeLocked
 
 from ..recipes.time_locked import (epochs_compute_cnv, cv_decode_sliding,
                                    decode_sliding, cv_decode_generalization,
@@ -36,11 +36,11 @@ from ..utils import mne_epochs_key_to_index, epochs_has_event
 from ..algorithms.decoding import decode_window
 
 
-class ContingentNegativeVariation(BaseMeasure):
+class ContingentNegativeVariation(BaseMarker):
     """docstring for ContingentNegativeVariation"""
 
     def __init__(self, tmin=None, tmax=None, comment='default'):
-        BaseMeasure.__init__(self, tmin, tmax, comment)
+        BaseMarker.__init__(self, tmin, tmax, comment)
 
     def _fit(self, epochs):
         cnv = epochs_compute_cnv(epochs, self.tmin, self.tmax)
@@ -155,10 +155,10 @@ def read_erc(fname, epochs, comment='default'):
     return TimeLockedContrast._read(fname, epochs=epochs, comment=comment)
 
 
-class WindowDecoding(BaseMeasure):
+class WindowDecoding(BaseMarker):
     def __init__(self, tmin, tmax, condition_a, condition_b,
                  decoding_params=None, comment='default'):
-        BaseMeasure.__init__(self, tmin, tmax, comment)
+        BaseMarker.__init__(self, tmin, tmax, comment)
         self.condition_a = condition_a
         self.condition_b = condition_b
         if decoding_params is None:
@@ -205,10 +205,10 @@ def read_wd(fname, comment='default'):
     return WindowDecoding._read(fname, comment=comment)
 
 
-class TimeDecoding(BaseMeasure):
+class TimeDecoding(BaseMarker):
     def __init__(self, tmin, tmax, condition_a, condition_b,
                  decoding_params=None, comment='default'):
-        BaseMeasure.__init__(self, tmin, tmax, comment)
+        BaseMarker.__init__(self, tmin, tmax, comment)
         self.condition_a = condition_a
         self.condition_b = condition_b
         self.decoding_params = decoding_params
@@ -255,10 +255,10 @@ def read_td(fname, comment='default'):
     return TimeDecoding._read(fname, comment=comment)
 
 
-class GeneralizationDecoding(BaseMeasure):
+class GeneralizationDecoding(BaseMarker):
     def __init__(self, tmin, tmax, condition_a, condition_b,
                  decoding_params=None, comment='default'):
-        BaseMeasure.__init__(self, tmin, tmax, comment)
+        BaseMarker.__init__(self, tmin, tmax, comment)
         self.condition_a = condition_a
         self.condition_b = condition_b
         self.decoding_params = decoding_params

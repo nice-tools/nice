@@ -24,16 +24,16 @@
 from collections import OrderedDict
 import numpy as np
 
-from .base import BaseMeasure
+from .base import BaseMarker
 from ..algorithms.connectivity import epochs_compute_wsmi
 
 
-class SymbolicMutualInformation(BaseMeasure):
+class SymbolicMutualInformation(BaseMarker):
     """docstring for SymbolicMutualInformation"""
 
     def __init__(self, tmin=None, tmax=None, kernel=3, tau=8, backend="python",
                  method_params=None, method='weighted', comment='default'):
-        BaseMeasure.__init__(self, tmin, tmax, comment)
+        BaseMarker.__init__(self, tmin, tmax, comment)
         if method_params is None:
             method_params = {}
         self.kernel = kernel

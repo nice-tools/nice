@@ -42,8 +42,8 @@ from sklearn.pipeline import make_pipeline
 
 import matplotlib.pyplot as plt
 
-from nice import Features
-from nice.measures import (PowerSpectralDensity,
+from nice import Markers
+from nice.markers import (PowerSpectralDensity,
                            KolmogorovComplexity,
                            PermutationEntropy,
                            SymbolicMutualInformation,
@@ -96,7 +96,7 @@ base_psd = PowerSpectralDensityEstimator(
 
 # Here are the resting-state compatible markers we considered in the paper.
 
-features = Features([
+markers = Markers([
     PowerSpectralDensity(estimator=base_psd, fmin=1., fmax=4.,
                          normalize=False, comment='delta'),
     PowerSpectralDensity(estimator=base_psd, fmin=1., fmax=4.,
@@ -177,13 +177,13 @@ reduction_params = {
     }
 }
 
-X = np.empty((len(epochs), len(features)))
+X = np.empty((len(epochs), len(markers)))
 for ii in range(len(epochs)):
-    features.fit(epochs[ii])
-    X[ii, :] = features.reduce_to_scalar(measure_params=reduction_params)
+    markers.fit(epochs[ii])
+    X[ii, :] = markers.reduce_to_scalar(marker_params=reduction_params)
     # XXX hide this inside code
-    for measure in features.values():
-        delattr(measure, 'data_')
+    for marker in markers.values():
+        delattr(marker, 'data_')
     delattr(base_psd, 'data_')
 
 y = epochs.events[:, 2] - 2
@@ -196,7 +196,7 @@ n_estimators = 200
 doc_forest = make_pipeline(
     RobustScaler(),
     ExtraTreesClassifier(
-        n_estimators=n_estimators, max_features=1, criterion='entropy',
+        n_estimators=n_estimators, max_markers=1, criterion='entropy',
         max_depth=4, random_state=42, class_weight='balanced'))
 
 cv = GroupShuffleSplit(n_splits=50, train_size=0.8, test_size=0.2,
@@ -217,8 +217,8 @@ variable_importance = doc_forest.steps[-1][-1].feature_importances_
 sorter = variable_importance.argsort()
 
 # shorten the names a bit.
-var_names = list(features.keys())
-var_names = [var_names[ii].lstrip('nice/measure/') for ii in sorter]
+var_names = list(markers.keys())
+var_names = [var_names[ii].lstrip('nice/marker/') for ii in sorter]
 
 # let's plot it
 plt.figure(figsize=(8, 6))

@@ -38,20 +38,20 @@ import h5py
 from mne.utils import _TempDir
 
 # our imports
-from nice.measures import PowerSpectralDensity, read_psd
-from nice.measures import ContingentNegativeVariation, read_cnv
-from nice.measures import KolmogorovComplexity, read_komplexity
-from nice.measures import PermutationEntropy, read_pe
-from nice.measures import SymbolicMutualInformation, read_smi
+from nice.markers import PowerSpectralDensity, read_psd
+from nice.markers import ContingentNegativeVariation, read_cnv
+from nice.markers import KolmogorovComplexity, read_komplexity
+from nice.markers import PermutationEntropy, read_pe
+from nice.markers import SymbolicMutualInformation, read_smi
 
-from nice.measures import TimeLockedTopography, read_ert
+from nice.markers import TimeLockedTopography, read_ert
 
-from nice.measures import TimeLockedContrast, read_erc
+from nice.markers import TimeLockedContrast, read_erc
 
-from nice.measures import WindowDecoding, read_wd
-from nice.measures import TimeDecoding, read_td
-from nice.measures import GeneralizationDecoding, read_gd
-from nice.measures import PowerSpectralDensityEstimator
+from nice.markers import WindowDecoding, read_wd
+from nice.markers import TimeDecoding, read_td
+from nice.markers import GeneralizationDecoding, read_gd
+from nice.markers import PowerSpectralDensityEstimator
 
 matplotlib.use('Agg')  # for testing don't use X server
 
@@ -152,7 +152,7 @@ def _base_compression_test(inst, epochs):
 
 
 def test_spectral():
-    """Test computation of spectral measures"""
+    """Test computation of spectral markers"""
     epochs = _get_data()[:2]
     psds_params = dict(n_fft=4096, n_overlap=100, n_jobs='auto',
                        nperseg=128)
@@ -170,7 +170,7 @@ def test_spectral():
 
 
 def test_time_locked():
-    """Test computation of time locked measures"""
+    """Test computation of time locked markers"""
 
     raw = mne.io.Raw(raw_fname)
     raw.info['lowpass'] = 70.  # To avoid warning
@@ -209,7 +209,7 @@ def test_time_locked():
 
 
 def test_komplexity():
-    """Test computation of komplexity measure"""
+    """Test computation of komplexity marker"""
     epochs = _get_data()[:2]
     komp = KolmogorovComplexity()
     _base_io_test(komp, epochs, read_komplexity)
@@ -218,7 +218,7 @@ def test_komplexity():
 
 
 def test_pe():
-    """Test computation of permutation entropy measure"""
+    """Test computation of permutation entropy marker"""
     epochs = _get_data()[:2]
     pe = PermutationEntropy()
     _base_io_test(pe, epochs, read_pe)
@@ -227,7 +227,7 @@ def test_pe():
 
 
 def test_wsmi():
-    """Test computation of wsmi measure"""
+    """Test computation of wsmi marker"""
     epochs = _get_data()[:2]
     method_params = {'bypass_csd': True}
     wsmi = SymbolicMutualInformation(method_params=method_params)

@@ -23,8 +23,8 @@
 from collections import OrderedDict
 from .utils import h5_listdir
 from mne.externals.h5io import read_hdf5, write_hdf5
-from .measures.base import BaseMeasure, BaseTimeLocked
-from .measures.spectral import BasePowerSpectralDensity, read_psd_estimator
+from .markers.base import BaseMarker, BaseTimeLocked
+from .markers.spectral import BasePowerSpectralDensity, read_psd_estimator
 import sys
 import inspect
 import mne
@@ -34,13 +34,13 @@ from mne.utils import logger
 import numpy as np
 
 
-class Features(OrderedDict):
+class Markers(OrderedDict):
 
-    def __init__(self, measures):
+    def __init__(self, markers):
         OrderedDict.__init__(self)
-        for meas in measures:
-            self._add_measure(meas)
-        if self._check_measures_fit():
+        for meas in markers:
+            self._add_marker(meas)
+        if self._check_markers_fit():
             self.ch_info_ = list(self.values())[0].ch_info_
 
     def fit(self, epochs):
@@ -53,7 +53,7 @@ class Features(OrderedDict):
             meas.fit(epochs)
         self.ch_info_ = list(self.values())[0].ch_info_
 
-    def _check_measures_fit(self):
+    def _check_markers_fit(self):
         is_fit = True
         for meas in self.values():
             if not hasattr(meas, 'ch_info_'):
@@ -63,47 +63,47 @@ class Features(OrderedDict):
 
     def topo_names(self):
         info = self.ch_info_
-        measure_names = [
+        marker_names = [
             meas._get_title() for meas in self.values() if isin_info(
                 info_source=info, info_target=meas.ch_info_) and
             'channels' in meas._axis_map]
-        return measure_names
+        return marker_names
 
     def scalar_names(self):
         return list(self.keys())
 
-    def reduce_to_topo(self, measure_params):
+    def reduce_to_topo(self, marker_params):
         logger.info('Reducing to topographies')
-        self._check_measure_params_keys(measure_params)
+        self._check_marker_params_keys(marker_params)
         ch_picks = mne.pick_types(self.ch_info_, eeg=True, meg=True)
         if ch_picks is not None:  # XXX think if info is needed down-stream
             info = mne.io.pick.pick_info(self.ch_info_, ch_picks, copy=True)
         else:
             info = self.ch_info_
-        measures_to_topo = [
+        markers_to_topo = [
             meas for meas in self.values() if isin_info(
                 info_source=info, info_target=meas.ch_info_) and
             'channels' in meas._axis_map]
-        n_measures = len(measures_to_topo)
+        n_markers = len(markers_to_topo)
         if ch_picks is None:
             n_channels = info['nchan']
         else:
             n_channels = len(ch_picks)
-        out = np.empty((n_measures, n_channels), dtype=np.float64)
-        for ii, meas in enumerate(measures_to_topo):
+        out = np.empty((n_markers, n_channels), dtype=np.float64)
+        for ii, meas in enumerate(markers_to_topo):
             logger.info('Reducing {}'.format(meas._get_title()))
-            this_params = _get_reduction_params(measure_params, meas)
+            this_params = _get_reduction_params(marker_params, meas)
             out[ii] = meas.reduce_to_topo(**this_params)
         return out
 
-    def reduce_to_scalar(self, measure_params):
+    def reduce_to_scalar(self, marker_params):
         logger.info('Reducing to scalars')
-        self._check_measure_params_keys(measure_params)
-        n_measures = len(self)
-        out = np.empty(n_measures, dtype=np.float64)
+        self._check_marker_params_keys(marker_params)
+        n_markers = len(self)
+        out = np.empty(n_markers, dtype=np.float64)
         for ii, meas in enumerate(self.values()):
             logger.info('Reducing {}'.format(meas._get_title()))
-            this_params = _get_reduction_params(measure_params, meas)
+            this_params = _get_reduction_params(marker_params, meas)
             out[ii] = meas.reduce_to_scalar(**this_params)
 
         return out
@@ -114,40 +114,40 @@ class Features(OrderedDict):
                 meas.compress(reduction_func)
 
     def save(self, fname, overwrite=False):
-        if not fname.endswith('-features.hdf5'):
+        if not fname.endswith('-markers.hdf5'):
             logger.warning('Feature collections file name should end '
-                           'with "-features.hdf5". Some NICE features '
+                           'with "-markers.hdf5". Some NICE markers '
                            'might not work.')
-        write_hdf5(fname, list(self.keys()), title='nice/features/order',
+        write_hdf5(fname, list(self.keys()), title='nice/markers/order',
                    overwrite=overwrite, slash='replace')
         for meas in self.values():
             meas.save(fname, overwrite='update')
 
-    def _add_measure(self, measure):
-        self[measure._get_title()] = measure
+    def _add_marker(self, marker):
+        self[marker._get_title()] = marker
 
-    def add_measure(self, measure):
-        if self._check_measures_fit():
-            raise ValueError('Adding a measure to an already fit collection '
+    def add_marker(self, marker):
+        if self._check_markers_fit():
+            raise ValueError('Adding a marker to an already fit collection '
                              'is not allowed')
-        if not isinstance(measure, list):
-            measure = [measure]
-        for meas in measure:
-            self._add_measure(meas)
+        if not isinstance(marker, list):
+            marker = [marker]
+        for meas in marker:
+            self._add_marker(meas)
 
-    def _check_measure_params_keys(self, measure_params):
-        for key in measure_params.keys():
+    def _check_marker_params_keys(self, marker_params):
+        for key in marker_params.keys():
             error = False
             if '/' in key:
                 klass, comment = key.split('/')
-                if 'nice/measure/{}/{}'.format(klass, comment) not in self:
+                if 'nice/marker/{}/{}'.format(klass, comment) not in self:
                     error = True
             else:
-                prefix = 'nice/measure/{}'.format(key)
+                prefix = 'nice/marker/{}'.format(key)
                 if not any(k.startswith(prefix) for k in self.keys()):
                     error = True
             if error:
-                raise ValueError('Your measure_params is inconsistent with '
+                raise ValueError('Your marker_params is inconsistent with '
                                  'the elements in this feature collection: '
                                  '{} is not a valid feature or class'
                                  .format(key))
@@ -162,16 +162,16 @@ class Features(OrderedDict):
 #     return out
 
 
-def _get_reduction_params(measure_params, meas):
+def _get_reduction_params(marker_params, meas):
     # XXX Check for typos and issue warnings
     full = '{}/{}'.format(meas.__class__.__name__, meas.comment)
     out = {}
-    if full in measure_params:
-        out = measure_params[full]
+    if full in marker_params:
+        out = marker_params[full]
     else:
         part = full.split('/')[0]
-        if part in measure_params:
-            out = measure_params[part]
+        if part in marker_params:
+            out = marker_params[part]
     if len(out) == 0:
         raise ValueError('No reduction for {}'.format(full))
     return out
@@ -186,16 +186,16 @@ def isin_info(info_source, info_target):
     return is_compat
 
 
-def read_features(fname):
-    measures_classes = dict(inspect.getmembers(sys.modules['nice.measures']))
+def read_markers(fname):
+    markers_classes = dict(inspect.getmembers(sys.modules['nice.markers']))
     contents = h5_listdir(fname)
-    measures = list()
+    markers = list()
     epochs = None
-    if 'nice/features/order' in contents:
-        measure_order = read_hdf5(fname, title='nice/features/order',
+    if 'nice/markers/order' in contents:
+        marker_order = read_hdf5(fname, title='nice/markers/order',
                                   slash='replace')
     else:
-        measure_order = [k for k in contents if 'nice/measure/' in k]
+        marker_order = [k for k in contents if 'nice/marker/' in k]
 
     if any('nice/data/epochs' in k for k in contents):
         epochs = read_hdf5(fname, title='nice/data/epochs', slash='replace')
@@ -215,23 +215,23 @@ def read_features(fname):
         estimator_comment = estimator_name.split('/')[-1]
         this_estimator = read_psd_estimator(fname, comment=estimator_comment)
         all_estimators[estimator_comment] = this_estimator
-    for content in measure_order:
+    for content in marker_order:
         _, _, my_class_name, comment = content.split('/')
-        my_class = measures_classes[my_class_name]
+        my_class = markers_classes[my_class_name]
         if issubclass(my_class, BaseTimeLocked):
             if not epochs:
                 raise RuntimeError(
                     'Something weird has happened. You want to read a '
-                    'measure that depends on epochs but '
+                    'marker that depends on epochs but '
                     'I could not find any epochs in the file you gave me.')
-            measures.append(my_class._read(fname, epochs, comment=comment))
+            markers.append(my_class._read(fname, epochs, comment=comment))
         elif issubclass(my_class, BasePowerSpectralDensity):
-            measures.append(
+            markers.append(
                 my_class._read(
                     fname, estimators=all_estimators, comment=comment))
-        elif issubclass(my_class, BaseMeasure):
-            measures.append(my_class._read(fname, comment=comment))
+        elif issubclass(my_class, BaseMarker):
+            markers.append(my_class._read(fname, comment=comment))
         else:
             raise ValueError('Come on--this is not a Nice class!')
-    measures = Features(measures)
-    return measures
+    markers = Markers(markers)
+    return markers

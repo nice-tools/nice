@@ -30,14 +30,14 @@ import numpy as np
 from mne.utils import logger
 from mne.externals.h5io import write_hdf5
 
-from .base import (BaseMeasure, BaseContainer, _get_title, _read_container)
+from .base import (BaseMarker, BaseContainer, _get_title, _read_container)
 from ..algorithms.spectral import psd_welch
 
 
-class BasePowerSpectralDensity(BaseMeasure):
+class BasePowerSpectralDensity(BaseMarker):
     def __init__(self, tmin, tmax, fmin, fmax, estimator=None,
                  comment='default'):
-        BaseMeasure.__init__(self, tmin, tmax, comment)
+        BaseMarker.__init__(self, tmin, tmax, comment)
         self.fmin = fmin
         self.fmax = fmax
         self.estimator = estimator
