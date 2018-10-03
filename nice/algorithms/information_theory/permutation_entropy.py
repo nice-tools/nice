@@ -17,7 +17,8 @@
 # You can be released from the requirements of the license by purchasing a
 # commercial license. Buying such a license is mandatory as soon as you
 # develop commercial activities as mentioned in the GNU Affero General Public
-# License version 3 without disclosing the source code of your own applications.
+# License version 3 without disclosing the source code of your own
+# applications.
 #
 import math
 import numpy as np
