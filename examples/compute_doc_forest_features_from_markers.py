@@ -24,7 +24,17 @@ References
 import numpy as np
 from scipy.stats import trim_mean
 
+import mne
+
 from nice.features import read_features
+
+import matplotlib.pyplot as plt
+from matplotlib.path import Path
+from matplotlib.patches import PathPatch
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+import seaborn as sns
+sns.set_color_codes()
 
 
 def trim_mean80(a, axis=0):
@@ -39,6 +49,7 @@ fc = read_features('JSXXX-features.hdf5')
 
 reduction_params = {}
 scalp_roi = np.arange(224)
+non_scalp = np.arange(224, 256)
 cnv_roi = np.array([5,  6, 13, 14, 15, 21, 22])
 mmn_roi = np.array([5,   6,   8,  13,  14,  15,  21,  22,  44,  80, 131, 185])
 p3b_roi = np.array([8,  44,  80,  99, 100, 109, 118, 127, 128, 131, 185])
@@ -158,3 +169,82 @@ reduction_params['TimeLockedContrast/p3a'] = {
         'times': None}}
 
 scalars = fc.reduce_to_scalar(reduction_params)
+topos = fc.reduce_to_topo(reduction_params)
+
+to_plot = ['nice/measure/PowerSpectralDensity/deltan',
+           'nice/measure/PowerSpectralDensity/thetan',
+           'nice/measure/PowerSpectralDensity/alphan',
+           'nice/measure/PowerSpectralDensity/betan',
+           'nice/measure/PowerSpectralDensity/gamman']
+
+idx = [list(fc.keys()).index(x) for x in to_plot]
+names = [x.split('/')[-1] for x in to_plot]
+topos_to_plot = topos[idx]
+
+
+# Prepare fancy EGI plot
+montage = mne.channels.read_montage('GSN-HydroCel-256')
+ch_names = ['E{}'.format(i) for i in range(1, 257)]
+info = mne.create_info(ch_names, 1, ch_types='eeg', montage=montage)
+layout = mne.channels.make_eeg_layout(info)
+pos = layout.pos[:, :2]
+
+_egi256_outlines = {
+    'ear1': np.array([190, 191, 201, 209, 218, 217, 216, 208, 200, 190]),
+    'ear2': np.array([81, 72, 66, 67, 68, 73, 82, 92, 91, 81]),
+    'outer': np.array([9, 17, 24, 30, 31, 36, 45, 243, 240, 241, 242, 246, 250,
+                       255, 90, 101, 110, 119, 132, 144, 164, 173, 186, 198,
+                       207, 215, 228, 232, 236, 239, 238, 237, 233, 9]),
+}
+
+outlines = {}
+codes = []
+vertices = []
+
+for k, v in _egi256_outlines.items():
+    t_verts = pos[v, :]
+    outlines[k] = (t_verts[:, 0], t_verts[:, 1])
+    t_codes = 2 * np.ones(v.shape[0])
+    t_codes[0] = 1
+    codes.append(t_codes)
+    vertices.append(t_verts)
+vertices = np.concatenate(vertices, axis=0)
+codes = np.concatenate(codes, axis=0)
+
+path = Path(vertices=vertices, codes=codes)
+
+
+def patch():
+    return PathPatch(path, color='white', alpha=0.1)
+
+
+outlines['mask_pos'] = outlines['outer']
+outlines['patch'] = patch
+pos = layout.pos[:, :2]
+mask = np.in1d(np.arange(len(pos)), scalp_roi)
+mask_params = dict(marker='+', markerfacecolor='k', markeredgecolor='k',
+                   linewidth=0, markersize=1)
+
+cmap = 'viridis'
+n_axes = len(names)
+
+fig = None
+fig_kwargs = dict(figsize=(3 * n_axes, 4))
+fig, axes = plt.subplots(1, n_axes, **fig_kwargs)
+
+for ax, name, topo in zip(axes, names, topos_to_plot):
+    vmin = np.nanmin(topo[scalp_roi])
+    vmax = np.nanmax(topo[scalp_roi])
+    topo[non_scalp] = vmin
+    nan_idx = np.isnan(topo)
+
+    im, _ = mne.viz.topomap.plot_topomap(
+        topo[~nan_idx], pos[~nan_idx], vmin=vmin, vmax=vmax, axes=ax,
+        cmap=cmap, image_interp='nearest', outlines=outlines, sensors=False,
+        mask=mask, mask_params=mask_params, contours=0)
+
+    ax.set_title(name)
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    cbar = plt.colorbar(im, cax=cax, ticks=(vmin, vmax))
+    cbar.ax.tick_params(labelsize=8)
