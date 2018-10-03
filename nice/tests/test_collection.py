@@ -114,8 +114,8 @@ def test_collecting_feature():
 
     # check fit
     markers.fit(epochs)
-    for marker in markers:
-        assert_true(any(k.endswith('_') for k in vars(markers_list)))
+    for t_marker in markers_list:
+        assert_true(any(k.endswith('_') for k in vars(t_marker)))
 
     tmp = _TempDir()
     tmp_fname = tmp + '/test_markers.hdf5'
