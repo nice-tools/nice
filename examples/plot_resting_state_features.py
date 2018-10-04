@@ -19,11 +19,11 @@ conditions in a BCI experiment conducted with healthy participants.
 
 References
 ----------
-[1] Engemann D.A., Raimondo F., King JR., Rohaut B., Louppe G., Faugeras F.,
-    Annen J., Cassol H., Gosseries O., Fernandez-Slezak D., Laureys S.,
-    Naccache L., Dehaene S. and Sitt J.D. (in press).
+[1] Engemann D.A.*, Raimondo F.*, King JR., Rohaut B., Louppe G.,
+    Faugeras F., Annen J., Cassol H., Gosseries O., Fernandez-Slezak D.,
+    Laureys S., Naccache L., Dehaene S. and Sitt J.D. (2018).
     Robust EEG-based cross-site and cross-protocol classification of
-    states of consciousness (in press). Brain.
+    states of consciousness. Brain. doi:10.1093/brain/awy251
 """
 
 # Authors: Denis A. Engemann <denis.engemann@gmail.com>
