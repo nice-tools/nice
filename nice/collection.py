@@ -139,11 +139,11 @@ class Markers(OrderedDict):
         for key in marker_params.keys():
             error = False
             if '/' in key:
-                klass, comment = key.split('/')
-                if 'nice/marker/{}/{}'.format(klass, comment) not in self:
+                # klass, comment = key.split('/')
+                if not any(k.endswith(key) for k in self.keys()):
                     error = True
             else:
-                if not any(k.split('/')[3] == key for k in self.keys()):
+                if not any(k.split('/')[2] == key for k in self.keys()):
                     error = True
             if error:
                 raise ValueError('Your marker_params is inconsistent with '
