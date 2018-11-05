@@ -143,8 +143,7 @@ class Markers(OrderedDict):
                 if 'nice/marker/{}/{}'.format(klass, comment) not in self:
                     error = True
             else:
-                prefix = 'nice/marker/{}'.format(key)
-                if not any(k.startswith(prefix) for k in self.keys()):
+                if not any(k.split('/')[3] == key for k in self.keys()):
                     error = True
             if error:
                 raise ValueError('Your marker_params is inconsistent with '
