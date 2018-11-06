@@ -80,9 +80,11 @@ Cite
 
 If you use this code in your project, please cite::
 
-    *Denis Engemann, *Federico Raimondo, Jean-Remi King, Mainak Jas, Alexandre Gramfort, Stanislas Dehaene, Lionel Naccache, Jacobo Sitt
-    "Automated Markerment and Prediction of Consciousness in Vegetative and Minimally Conscious Patients"
-    in ICML Workshop on Statistics, Machine Learning and Neuroscience (Stamlins 2015)
+    Engemann D.A.*, Raimondo F.*, King JR., Rohaut B., Louppe G.,
+    Faugeras F., Annen J., Cassol H., Gosseries O., Fernandez-Slezak D.,
+    Laureys S., Naccache L., Dehaene S. and Sitt J.D. (2018).
+    Robust EEG-based cross-site and cross-protocol classification of
+    states of consciousness. Brain. Vol 141 (11), 3160–3178, doi:10.1093/brain/awy251
 
 Licensing
 ^^^^^^^^^
