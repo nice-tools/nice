@@ -162,10 +162,12 @@ class Markers(OrderedDict):
 
 _markers_classes = dict(inspect.getmembers(sys.modules['nice.markers']))
 
+
 def register_marker_class(cls):
     cls_name = cls.__name__
     logger.info('Registering {}'.format(cls_name))
     _markers_classes[cls_name] = cls
+
 
 def _get_reduction_params(marker_params, meas):
     # XXX Check for typos and issue warnings
@@ -197,7 +199,7 @@ def read_markers(fname):
     epochs = None
     if 'nice/markers/order' in contents:
         marker_order = read_hdf5(fname, title='nice/markers/order',
-                                  slash='replace')
+                                 slash='replace')
     else:
         marker_order = [k for k in contents if 'nice/marker/' in k]
 
