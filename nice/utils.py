@@ -29,9 +29,9 @@ import h5py
 from mne import create_info
 from mne.channels import read_montage
 from mne.io import RawArray
-from mne.externals.six import string_types
 from mne.externals.h5io import write_hdf5
 
+from six import string_types
 
 def create_mock_data_egi(n_channels, n_samples, stim=True):
     """Load and configure testing data
