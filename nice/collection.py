@@ -160,6 +160,12 @@ class Markers(OrderedDict):
 #         out = inst.reduce_to_scalar(**params)
 #     return out
 
+_markers_classes = dict(inspect.getmembers(sys.modules['nice.markers']))
+
+def register_marker_class(cls):
+    cls_name = cls.__name__
+    logger.info('Registering {}'.format(cls_name))
+    _markers_classes[cls_name] = cls
 
 def _get_reduction_params(marker_params, meas):
     # XXX Check for typos and issue warnings
@@ -186,7 +192,6 @@ def isin_info(info_source, info_target):
 
 
 def read_markers(fname):
-    markers_classes = dict(inspect.getmembers(sys.modules['nice.markers']))
     contents = h5_listdir(fname)
     markers = list()
     epochs = None
@@ -216,7 +221,7 @@ def read_markers(fname):
         all_estimators[estimator_comment] = this_estimator
     for content in marker_order:
         _, _, my_class_name, comment = content.split('/')
-        my_class = markers_classes[my_class_name]
+        my_class = _markers_classes[my_class_name]
         if issubclass(my_class, BaseTimeLocked):
             if not epochs:
                 raise RuntimeError(
