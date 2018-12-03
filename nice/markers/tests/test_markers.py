@@ -164,6 +164,18 @@ def test_spectral():
     _base_io_test(psd, epochs,
                   functools.partial(read_psd,
                                     estimators={'default': estimator}))
+
+    reduction_func = [
+        {'axis': 'frequency', 'function': np.sum},
+        {'axis': 'channels', 'function': np.mean},
+        {'axis': 'epochs', 'function': np.mean}]
+    out = psd._prepare_data(picks=None, target='scalar')
+    out = np.sum(out, axis=-1)
+    out = 10 * np.log10(out)
+    out = np.mean(out, axis=-1)
+    out = np.mean(out, axis=-1)
+    scalar = psd.reduce_to_scalar(reduction_func)
+    assert_equal(scalar, out)
     # TODO: Fix this test
     # _base_reduction_test(psd, epochs)
     # _base_compression_test(psd, epochs)

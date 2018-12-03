@@ -155,7 +155,8 @@ class BaseMarker(BaseContainer):
                                 .swapaxes(0, this_axis))
         return data
 
-    def _prepare_reduction(self, reduction_func, target, picks):
+    def _prepare_reduction(self, reduction_func, target, picks,
+                           return_axis=False):
         data = self._prepare_data(picks, target)
         _axis_map = self._axis_map
         funcs = list()
@@ -188,7 +189,11 @@ class BaseMarker(BaseContainer):
         logger.info('Reduction order for {}: {}'.format(
             self._get_title(), permutation_axes))
         data = np.transpose(data, permutation_list)
-        return data, funcs
+        if return_axis is False:
+            out = data, funcs
+        else:
+            out = data, funcs, permutation_axes
+        return out
 
 
 class BaseTimeLocked(BaseMarker):
