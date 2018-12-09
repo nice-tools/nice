@@ -139,12 +139,11 @@ class Markers(OrderedDict):
         for key in marker_params.keys():
             error = False
             if '/' in key:
-                klass, comment = key.split('/')
-                if 'nice/marker/{}/{}'.format(klass, comment) not in self:
+                # klass, comment = key.split('/')
+                if not any(k.endswith(key) for k in self.keys()):
                     error = True
             else:
-                prefix = 'nice/marker/{}'.format(key)
-                if not any(k.startswith(prefix) for k in self.keys()):
+                if not any(k.split('/')[2] == key for k in self.keys()):
                     error = True
             if error:
                 raise ValueError('Your marker_params is inconsistent with '
@@ -160,6 +159,14 @@ class Markers(OrderedDict):
 #     elif target == 'scalar':
 #         out = inst.reduce_to_scalar(**params)
 #     return out
+
+_markers_classes = dict(inspect.getmembers(sys.modules['nice.markers']))
+
+
+def register_marker_class(cls):
+    cls_name = cls.__name__
+    logger.info('Registering {}'.format(cls_name))
+    _markers_classes[cls_name] = cls
 
 
 def _get_reduction_params(marker_params, meas):
@@ -187,7 +194,6 @@ def isin_info(info_source, info_target):
 
 
 def read_markers(fname):
-    markers_classes = dict(inspect.getmembers(sys.modules['nice.markers']))
     contents = h5_listdir(fname)
     markers = list()
     epochs = None
@@ -217,7 +223,7 @@ def read_markers(fname):
         all_estimators[estimator_comment] = this_estimator
     for content in marker_order:
         _, _, my_class_name, comment = content.split('/')
-        my_class = markers_classes[my_class_name]
+        my_class = _markers_classes[my_class_name]
         if issubclass(my_class, BaseTimeLocked):
             if not epochs:
                 raise RuntimeError(
