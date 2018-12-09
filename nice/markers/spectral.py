@@ -205,9 +205,20 @@ class PowerSpectralDensity(BasePowerSpectralDensity):
         else:
             this_psds = self.estimator.data_[
                 ..., start:end][:, ch_picks][epochs_picks]
-        if self.dB is True and self.normalize is False:
-            this_psds = 10 * np.log10(this_psds)
         return this_psds
+
+    def _reduce_to(self, reduction_func, target, picks):
+        if not hasattr(self, 'data_'):
+            raise ValueError('You did not fit me. Do it again after fitting '
+                             'some data!')
+        out, funcs, axis = self._prepare_reduction(
+            reduction_func, target, picks, return_axis=True)
+        for func, ax in zip(funcs, axis):
+            out = func(out, axis=0)
+            if (self.dB is True and self.normalize is False and
+                    ax == 'frequency'):
+                out = 10 * np.log10(out)
+        return out
 
     @classmethod
     def _read(cls, fname, estimators=None, comment='default'):
