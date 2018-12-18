@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Compute external marker &#8212; NICE 0.1.dev1 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+
+
+
+
+
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          NICE</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="index.html">Examples</a></li>
+                <li><a href="../auto_tutorials/index.html">Tutorials</a></li>
+                <li><a href="../python_reference.html">API</a></li>
+                <li><a href="https://github.com/nice-tools/nice">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Compute external marker</a><ul>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../_sources/auto_examples/plot_add_external_marker.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><ul>
+<li><a class="reference internal" href="#">Compute external marker</a><ul>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+<form action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="col-md-12 content">
+      
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Click <a class="reference internal" href="#sphx-glr-download-auto-examples-plot-add-external-marker-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="compute-external-marker">
+<span id="sphx-glr-auto-examples-plot-add-external-marker-py"></span><h1>Compute external marker<a class="headerlink" href="#compute-external-marker" title="Permalink to this headline">¶</a></h1>
+<p>Here we compute a marker that is not described [1] and combine it with the
+markers supported by nice.</p>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<table class="docutils footnote" frame="void" id="id1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td>Engemann D.A.*, Raimondo F.*, King JR., Rohaut B., Louppe G.,
+Faugeras F., Annen J., Cassol H., Gosseries O., Fernandez-Slezak D.,
+Laureys S., Naccache L., Dehaene S. and Sitt J.D. (2018).
+Robust EEG-based cross-site and cross-protocol classification of
+states of consciousness. Brain. doi:10.1093/brain/awy251</td></tr>
+</tbody>
+</table>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Registering MyCustomMarker
+Opening raw data file /Users/dengeman/github/nice/nice/tests/data/test_raw.fif...
+    Read a total of 3 projection items:
+        PCA-v1 (1 x 102)  idle
+        PCA-v2 (1 x 102)  idle
+        PCA-v3 (1 x 102)  idle
+    Range : 25800 ... 40199 =     42.956 ...    66.930 secs
+Ready.
+Current compensation grade : 0
+7 matching events found
+Applying baseline correction (mode: mean)
+Not setting metadata
+3 projection items activated
+Loading data for 7 events and 421 original time points ...
+0 bad epochs dropped
+Fitting nice/marker/PermutationEntropy/default
+Filtering  at 8.34 Hz
+Performing symbolic transformation
+Fitting nice/marker/ContingentNegativeVariation/default
+Fitting nice_custom_marker/marker/MyCustomMarker/default
+Writing channel info to HDF5 file
+Channel info already present in HDF5 file, will not be overwritten
+Channel info already present in HDF5 file, will not be overwritten
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Author: Federico Raimondo &lt;federaimondo@gmail.com&gt;</span>
+
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+
+<span class="kn">from</span> <span class="nn">mne.externals.h5io</span> <span class="kn">import</span> <span class="n">read_hdf5</span><span class="p">,</span> <span class="n">write_hdf5</span>
+<span class="kn">from</span> <span class="nn">mne.io.meas_info</span> <span class="kn">import</span> <span class="n">Info</span>
+<span class="kn">from</span> <span class="nn">mne.utils</span> <span class="kn">import</span> <span class="n">_TempDir</span>
+
+<span class="kn">from</span> <span class="nn">nice.markers.base</span> <span class="kn">import</span> <span class="n">BaseMarker</span>
+<span class="kn">from</span> <span class="nn">nice.collection</span> <span class="kn">import</span> <span class="n">register_marker_class</span>
+
+<span class="kn">from</span> <span class="nn">nice.markers</span> <span class="kn">import</span> <span class="n">ContingentNegativeVariation</span>
+<span class="kn">from</span> <span class="nn">nice.markers</span> <span class="kn">import</span> <span class="n">PermutationEntropy</span>
+
+<span class="kn">from</span> <span class="nn">nice</span> <span class="kn">import</span> <span class="n">Markers</span><span class="p">,</span> <span class="n">read_markers</span>
+
+<span class="kn">from</span> <span class="nn">nice.tests.test_collection</span> <span class="kn">import</span> <span class="n">_get_data</span>
+
+
+<span class="k">class</span> <span class="nc">MyCustomMarker</span><span class="p">(</span><span class="n">BaseMarker</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A custom marker.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">method_params</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize things.&quot;&quot;&quot;</span>
+        <span class="c1"># Call super constructor</span>
+        <span class="n">BaseMarker</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="n">comment</span><span class="p">)</span>
+
+        <span class="c1"># Custom marker parameters</span>
+        <span class="k">if</span> <span class="n">method_params</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">method_params</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">method_params</span> <span class="o">=</span> <span class="n">method_params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param1</span> <span class="o">=</span> <span class="n">param1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param2</span> <span class="o">=</span> <span class="n">param2</span>
+
+    <span class="c1"># MANDATORY: Axis map</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_axis_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">OrderedDict</span><span class="p">([</span>
+            <span class="p">(</span><span class="s1">&#39;epochs&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">(</span><span class="s1">&#39;channels&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;times&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_get_title</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># MANDATORY: Override _get_title method to use the custom name</span>
+        <span class="k">return</span> <span class="n">_get_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epochs</span><span class="p">):</span>
+        <span class="c1"># MANDATORY: Override _fit method to compute the marker</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">epochs</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+        <span class="c1"># Compute something</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_</span> <span class="o">=</span> <span class="n">data</span> <span class="o">**</span> <span class="mi">2</span>
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;MANDATORY.</span>
+
+<span class="sd">        Save method should be overriden to use the</span>
+<span class="sd">        custom title param.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_save_info</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
+        <span class="n">save_vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_save_vars</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ch_info_&#39;</span><span class="p">])</span>
+        <span class="n">write_hdf5</span><span class="p">(</span>
+            <span class="n">fname</span><span class="p">,</span>
+            <span class="n">save_vars</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">_get_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="p">),</span>
+            <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">slash</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_read</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
+        <span class="c1"># MANDATORY: Read method should be implemented</span>
+        <span class="k">return</span> <span class="n">_read_my_marker</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="n">comment</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_title</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="n">BaseMarker</span><span class="p">):</span>
+        <span class="n">kind</span> <span class="o">=</span> <span class="s1">&#39;marker&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Oh no-- what is this?&#39;</span><span class="p">)</span>
+    <span class="c1"># MANDATORY: Change the package of the title from nice to something else</span>
+    <span class="n">_title</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+        <span class="s1">&#39;nice_custom_marker&#39;</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">klass</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">comment</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">_title</span>
+
+
+<span class="k">def</span> <span class="nf">_read_my_marker</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
+    <span class="c1"># MANDATORY: This method should work for any marker as it is now.</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">read_hdf5</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span>  <span class="n">_get_title</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="n">comment</span><span class="p">),</span> <span class="n">slash</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+    <span class="n">init_params</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)}</span>
+    <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)}</span>
+    <span class="n">file_info</span> <span class="o">=</span> <span class="n">read_hdf5</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;nice/data/ch_info&#39;</span><span class="p">,</span> <span class="n">slash</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;filename&#39;</span> <span class="ow">in</span> <span class="n">file_info</span><span class="p">:</span>
+        <span class="k">del</span><span class="p">(</span><span class="n">file_info</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">])</span>
+    <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;ch_info_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Info</span><span class="p">(</span><span class="n">file_info</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">klass</span><span class="p">(</span><span class="o">**</span><span class="n">init_params</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="c1"># Resgister the marker to NICE</span>
+<span class="n">register_marker_class</span><span class="p">(</span><span class="n">MyCustomMarker</span><span class="p">)</span>
+
+<span class="c1"># Now you can create a collection with nice markers and the custom marker</span>
+
+<span class="n">markers_list</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">PermutationEntropy</span><span class="p">(),</span>
+    <span class="n">ContingentNegativeVariation</span><span class="p">(),</span>
+    <span class="n">MyCustomMarker</span><span class="p">()</span>
+<span class="p">]</span>
+
+<span class="n">markers</span> <span class="o">=</span> <span class="n">Markers</span><span class="p">(</span><span class="n">markers_list</span><span class="p">)</span>
+
+<span class="c1"># Fit on test data</span>
+<span class="n">epochs</span> <span class="o">=</span> <span class="n">_get_data</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">markers</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+
+<span class="c1"># Save to a file</span>
+<span class="n">tmp</span> <span class="o">=</span> <span class="n">_TempDir</span><span class="p">()</span>
+<span class="n">tmp_fname</span> <span class="o">=</span> <span class="n">tmp</span> <span class="o">+</span> <span class="s1">&#39;/test-markers.hdf5&#39;</span>
+<span class="n">markers</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">tmp_fname</span><span class="p">)</span>
+
+<span class="c1"># Read from file</span>
+<span class="n">markers2</span> <span class="o">=</span> <span class="n">read_markers</span><span class="p">(</span><span class="n">tmp_fname</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  5.547 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-add-external-marker-py">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" download="" href="../_downloads/7492d2f37133755de55e2ba3df33184d/plot_add_external_marker.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_add_external_marker.py</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" download="" href="../_downloads/f3e98eaf101d65585bd3a12c595846d1/plot_add_external_marker.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_add_external_marker.ipynb</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+    </div>
+    
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2018, Denis A. Engemann.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
