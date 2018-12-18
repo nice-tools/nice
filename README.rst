@@ -49,8 +49,8 @@ To run the tests you will also need nose >= 0.10.
 
 To use wSMI with CSD you need pycsd: https://github.com/nice-tools/pycsd/
 
-Optimizations
-^^^^^^^^^^^^^
+Optimizations (optional)
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Aditionally, we ship optimized versions of some algorithms.
 They can be compiled using the conda CLANG and openmp.
@@ -64,6 +64,7 @@ To build, go to the nice soure code directory and do::
 
     CC=clang make
 
+Then set backend='c' or 'openmp' instead of the defalut backend='python' in markers functions
 
 Running the test suite
 ^^^^^^^^^^^^^^^^^^^^^^
