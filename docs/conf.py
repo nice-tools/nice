@@ -132,7 +132,7 @@ html_theme_options = {
         ("API", "python_reference"),
         ("GitHub", "https://github.com/nice-tools/nice", True)
     ],
-    'bootswatch_theme': "spacelab"
+    'bootswatch_theme': "simplex"
 }
 
 # amelia
@@ -170,7 +170,7 @@ html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+# html_static_path = ['_static']
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
@@ -233,7 +233,7 @@ html_static_path = ['_static']
 #html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'mnehcpdoc'
+htmlhelp_basename = 'nicedoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -319,7 +319,7 @@ texinfo_documents = [
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'python': ('https://docs.python.org/', None),
-    'mne': ('http://martinos.org/mne/stable/', None),
+    'mne': ('http://martinos.org/mne/stable', None),
     'sklearn': ('https://scikit-learn.org/stable', None)
 }
 
