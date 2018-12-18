@@ -1,3 +1,24 @@
+"""External marker.
+
+=======================
+Compute external marker
+=======================
+
+Here we compute a marker that is not described [1] and combine it with the
+markers supported by nice.
+
+References
+----------
+[1] Engemann D.A.*, Raimondo F.*, King JR., Rohaut B., Louppe G.,
+    Faugeras F., Annen J., Cassol H., Gosseries O., Fernandez-Slezak D.,
+    Laureys S., Naccache L., Dehaene S. and Sitt J.D. (2018).
+    Robust EEG-based cross-site and cross-protocol classification of
+    states of consciousness. Brain. doi:10.1093/brain/awy251
+"""
+
+# Author: Federico Raimondo <federaimondo@gmail.com>
+
+
 from collections import OrderedDict
 
 from mne.externals.h5io import read_hdf5, write_hdf5
@@ -16,20 +37,22 @@ from nice.tests.test_collection import _get_data
 
 
 class MyCustomMarker(BaseMarker):
+    """A custom marker."""
+
     def __init__(self, tmin=None, tmax=None, param1=None, param2=None,
                  method_params=None, comment='default'):
+        """Initialize things."""
         # Call super constructor
         BaseMarker.__init__(self, tmin=None, tmax=None, comment=comment)
 
         # Custom marker parameters
         if method_params is None:
             method_params = {}
-       
+
         self.method_params = method_params
         self.param1 = param1
         self.param2 = param2
 
-    
     # MANDATORY: Axis map
     @property
     def _axis_map(self):
@@ -37,21 +60,25 @@ class MyCustomMarker(BaseMarker):
             ('epochs', 0)
             ('channels', 1),
             ('times', 2)
-            
+
         ])
 
-    # MANDATORY: Override _get_title method to use the custom name
     def _get_title(self):
+        # MANDATORY: Override _get_title method to use the custom name
         return _get_title(self.__class__, self.comment)
 
-    # MANDATORY: Override _fit method to compute the marker
     def _fit(self, epochs):
+        # MANDATORY: Override _fit method to compute the marker
         data = epochs.get_data()
         # Compute something
         self.data_ = data
-    
-    # MANDATORY: Save method should be overriden to use the custom title param
+
     def save(self, fname, overwrite=False):
+        """MANDATORY.
+
+        Save method should be overriden to use the
+        custom title param.
+        """
         self._save_info(fname, overwrite=overwrite)
         save_vars = self._get_save_vars(exclude=['ch_info_'])
         write_hdf5(
@@ -59,10 +86,10 @@ class MyCustomMarker(BaseMarker):
             save_vars,
             title=_get_title(self.__class__, self.comment),
             overwrite=overwrite, slash='replace')
-    
-    # MANDATORY: Read method should be implemented
+
     @classmethod
     def _read(cls, fname, comment='default'):
+        # MANDATORY: Read method should be implemented
         return _read_my_marker(cls, fname=fname, comment=comment)
 
 
@@ -77,8 +104,8 @@ def _get_title(klass, comment):
     return _title
 
 
-# MANDATORY: This method should work for any marker as it is now.
 def _read_my_marker(klass, fname, comment='default'):
+    # MANDATORY: This method should work for any marker as it is now.
     data = read_hdf5(fname,  _get_title(klass, comment), slash='replace')
     init_params = {k: v for k, v in data.items() if not k.endswith('_')}
     attrs = {k: v for k, v in data.items() if k.endswith('_')}

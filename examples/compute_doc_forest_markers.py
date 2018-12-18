@@ -1,4 +1,4 @@
-"""
+"""Compute markers.
 
 ==================================================
 Compute markers used for publication
@@ -9,7 +9,7 @@ an EGI recording from a control subject.
 
 References
 ----------
-[1] Engemann D.A.*, Raimondo F.*, King JR., Rohaut B., Louppe G.,
+[1] Engemann D.A.`*, Raimondo F.`*, King JR., Rohaut B., Louppe G.,
     Faugeras F., Annen J., Cassol H., Gosseries O., Fernandez-Slezak D.,
     Laureys S., Naccache L., Dehaene S. and Sitt J.D. (2018).
     Robust EEG-based cross-site and cross-protocol classification of
@@ -21,6 +21,9 @@ References
 
 import os.path as op
 import mne
+
+import numpy as np
+import matplotlib.pyplot as plt
 
 from nice import Markers
 from nice.markers import (PowerSpectralDensity,
@@ -47,9 +50,16 @@ epochs = mne.read_epochs(fname, preload=True)
 
 psds_params = dict(n_fft=4096, n_overlap=100, n_jobs='auto', nperseg=128)
 
+
 base_psd = PowerSpectralDensityEstimator(
     psd_method='welch', tmin=None, tmax=0.6, fmin=1., fmax=45.,
     psd_params=psds_params, comment='default')
+
+# Note that the psd is shared by all `PowerSpectralDensity` markers.
+# To save time, the PSD will not be re-computed.
+# When making another set of marker, also recompute the base_psd explicitly.
+
+
 m_list = [
     PowerSpectralDensity(estimator=base_psd, fmin=1., fmax=4.,
                          normalize=False, comment='delta'),
@@ -123,3 +133,18 @@ mc = Markers(m_list)
 
 mc.fit(epochs)
 mc.save('data/JSXXX-markers.hdf5')
+
+
+##############################################################################
+# Let's explore a bit the PSDs used for the marker computation
+
+psd = base_psd.data_
+freqs = base_psd.freqs_
+
+plt.figure()
+plt.semilogy(freqs, np.mean(psd, axis=0).T, alpha=0.1, color='black')
+plt.xlim(2, 40)
+plt.ylabel('log(psd)')
+plt.xlabel('Frequency [Hz]')
+
+# We clearly see alpha and beta band peaks.

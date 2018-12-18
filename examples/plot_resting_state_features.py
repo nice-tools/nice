@@ -1,4 +1,4 @@
-"""
+"""BCI.
 
 ==================================================
 Apply DOC-Forest recipe to single subject BCI data
@@ -19,7 +19,7 @@ conditions in a BCI experiment conducted with healthy participants.
 
 References
 ----------
-[1] Engemann D.A.*, Raimondo F.*, King JR., Rohaut B., Louppe G.,
+[1] Engemann D.A.`*, Raimondo F.`*, King JR., Rohaut B., Louppe G.,
     Faugeras F., Annen J., Cassol H., Gosseries O., Fernandez-Slezak D.,
     Laureys S., Naccache L., Dehaene S. and Sitt J.D. (2018).
     Robust EEG-based cross-site and cross-protocol classification of
@@ -196,7 +196,7 @@ n_estimators = 200
 doc_forest = make_pipeline(
     RobustScaler(),
     ExtraTreesClassifier(
-        n_estimators=n_estimators, max_markers=1, criterion='entropy',
+        n_estimators=n_estimators, max_features=1, criterion='entropy',
         max_depth=4, random_state=42, class_weight='balanced'))
 
 cv = GroupShuffleSplit(n_splits=50, train_size=0.8, test_size=0.2,

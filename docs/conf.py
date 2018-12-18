@@ -119,7 +119,7 @@ todo_include_todos = False
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'rtd'
+html_theme = 'bootstrap'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -285,7 +285,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'mne-hcp', u'mn-hcp Documentation',
+    (master_doc, 'nice', u'NICE Documentation',
      [author], 1)
 ]
 
@@ -316,15 +316,6 @@ texinfo_documents = [
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
 
-try:
-    from mayavi import mlab
-    find_mayavi_figures = True
-    # Do not pop up any mayavi windows while running the
-    # examples. These are very annoying since they steal the focus.
-    # mlab.options.offscreen = True  XXX bug with mayavi
-except Exception:
-    find_mayavi_figures = False
-
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'python': ('https://docs.python.org/', None),
@@ -333,10 +324,10 @@ intersphinx_mapping = {
 }
 
 sphinx_gallery_conf = {
-    'examples_dirs': ['../examples', '../tutorials'],
-    'gallery_dirs': ['auto_examples', 'auto_tutorials'],
-    'find_mayavi_figures': find_mayavi_figures,
-    'mod_example_dir': 'generated',
+    'examples_dirs': ['../examples'],
+    'gallery_dirs': ['auto_examples'],
+    # 'mod_example_dir': 'generated',
+    'backreferences_dir': 'gen_modules/backreferences',
     'reference_url': {
         'mne': 'http://martinos.org/mne/stable',
         'numpy': 'http://docs.scipy.org/doc/numpy-1.9.1',
