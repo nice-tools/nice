@@ -46,6 +46,9 @@ def _psd_welch(x, sfreq, fmin=0, fmax=np.inf, nperseg=256, n_fft=256,
         The lower frequency of interest.
     fmax : float
         The upper frequency of interest.
+    nperseg : int, optional
+        Length of each segment. Defaults to None, but if window is str or tuple, is set to 256, 
+        and if window is array_like, is set to the length of the window.
     n_fft : int
         The length of the tapers ie. the windows. The smaller
         it is the smoother are the PSDs. The default value is 256.
@@ -132,6 +135,9 @@ def psd_welch(inst, fmin=0, fmax=np.inf, tmin=None, tmax=None, n_fft=256,
     n_overlap : int
         The number of points of overlap between blocks. Will be adjusted
         to be <= n_fft. The default value is 0.
+    nperseg : int, optional
+        Length of each segment. Defaults to None, but if window is str or tuple, is set to 256, 
+        and if window is array_like, is set to the length of the window.
     picks : array-like of int | None
         The selection of channels to include in the computation.
         If None, take all channels.
