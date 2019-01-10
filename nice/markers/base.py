@@ -118,6 +118,10 @@ class BaseMarker(BaseContainer):
             out = func(out, axis=0)
         return out
 
+    def reduce_to_epochs(self, reduction_func, picks=None):
+        return self._reduce_to(
+            reduction_func, target='epochs', picks=picks)
+
     def reduce_to_topo(self, reduction_func, picks=None):
         return self._reduce_to(
             reduction_func, target='topography', picks=picks)
