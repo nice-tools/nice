@@ -73,6 +73,41 @@ class Markers(OrderedDict):
         return list(self.keys())
 
     def reduce_to_epochs(self, marker_params):
+        """Reduce each marker of the collection to a single value per epoch.
+
+        Parameters
+        ----------
+        marker_params : dict with reduction parameters
+            Each key of the dict should be of the form MarkerClass or 
+            MarkerClass/comment. Each value should be a dictionary with two
+            keys: 'reduction_func' and 'picks'.
+
+            reduction_func: list of dictionaries. Each dictionary should have 
+                two keys: 'axis' and 'function'. The marker is going to be
+                reduced following the order of the list. Selecting the
+                corresponding axis and applying the corresponding function.
+            picks: dictionary of axis to array. Before appling the reduction
+                function, the corresponding axis will be subselected by picks.
+                A value of None indicates all the elements.
+
+            Example:
+                marker_params = dict()
+                reduction_params['PowerSpectralDensity'] = {
+                'reduction_func':
+                    [{'axis': 'frequency', 'function': np.sum},
+                     {'axis': 'channels', 'function': np.mean},
+                     {'axis': 'epochs', 'function': np.mean}],
+                'picks': {
+                    'epochs': None,
+                    'channels': np.arange(224)}}
+
+        Returns
+        -------
+        out : dict
+            Each marker of the collection will be a key, with a value 
+            representing the marker value for each epoch (
+                np.ndarray of float, shape(n_epochs,))
+        """
         logger.info('Reducing to epochs')
         self._check_marker_params_keys(marker_params)
         ch_picks = mne.pick_types(self.ch_info_, eeg=True, meg=True)

@@ -119,6 +119,31 @@ class BaseMarker(BaseContainer):
         return out
 
     def reduce_to_epochs(self, reduction_func, picks=None):
+        """Reduce  marker to a single value per epoch.
+
+        Parameters
+        ----------
+        reduction_func : list of dictionaries. 
+            Each dictionary should have two keys: 'axis' and 'function'. 
+            The marker is going to be reduced following the order of the list.
+            Selecting the corresponding axis and applying the corresponding
+            function.
+        picks : dictionary of axis to array. 
+            Before appling the reduction function, the corresponding axis will
+            be subselected by picks. A value of None indicates all the elements.
+
+        Example:
+            reduction_func = [
+                {'axis': 'frequency', 'function': np.sum},
+                {'axis': 'channels', 'function': np.mean},
+                {'axis': 'epochs', 'function': np.mean}]
+            picks = {'epochs': None, 'channels': np.arange(224)}
+
+        Returns
+        -------
+        out : np.ndarray of float, shape(n_epochs,)
+            The value of the marker for each epoch.
+        """
         return self._reduce_to(
             reduction_func, target='epochs', picks=picks)
 
