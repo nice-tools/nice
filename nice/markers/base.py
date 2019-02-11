@@ -98,7 +98,7 @@ class BaseMarker(BaseContainer):
         if not isinstance(targets, list):
             targets = [targets]
         for elem in targets:
-            if 'topography' == elem:
+            if elem in ['topography', 'channels']:
                 to_preserve.append('channels')
             elif 'times' == elem:
                 to_preserve.append('times')

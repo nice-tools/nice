@@ -211,6 +211,7 @@ class PowerSpectralDensity(BasePowerSpectralDensity):
         if not hasattr(self, 'data_'):
             raise ValueError('You did not fit me. Do it again after fitting '
                              'some data!')
+
         out, funcs, axis = self._prepare_reduction(
             reduction_func, target, picks, return_axis=True)
         for func, ax in zip(funcs, axis):
