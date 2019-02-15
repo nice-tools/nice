@@ -43,3 +43,4 @@ cover
 *.orig
 *.gch
 .remote-sync.json
+.vscode
