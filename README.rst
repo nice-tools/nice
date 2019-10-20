@@ -66,6 +66,15 @@ To build, go to the nice soure code directory and do::
 
 Then set backend='c' or 'openmp' instead of the defalut backend='python' in markers functions
 
+If running on osx 10.15, then you might face this error::
+
+    /anaconda3/include/python3.7m/Python.h:25:10: fatal error: 'stdio.h' file not found
+
+Running this command will fix it::
+
+    sudo ln -s /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/* /usr/local/include/
+
+
 Running the test suite
 ^^^^^^^^^^^^^^^^^^^^^^
 
