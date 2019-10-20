@@ -27,7 +27,7 @@ from scipy.io import loadmat
 import h5py
 
 from mne import create_info
-from mne.channels import read_montage
+from mne.channels import make_standard_montage
 from mne.io import RawArray
 from mne.externals.h5io import write_hdf5
 
@@ -67,7 +67,7 @@ def create_mock_data_egi(n_channels, n_samples, stim=True):
 
     info = create_info(ch_names=ch_names, ch_types=ch_types, sfreq=sfreq)
     raw = RawArray(data=data, info=info)
-    montage = read_montage('GSN-HydroCel-257')
+    montage = make_standard_montage('GSN-HydroCel-257')
     raw.set_montage(montage)
     info['description'] = 'egi/256'
     return raw

@@ -230,7 +230,7 @@ topos_to_plot = topos[idx]
 
 
 # Prepare fancy EGI plot with nicer outline.
-montage = mne.channels.read_montage('GSN-HydroCel-256')
+montage = mne.channels.make_standard_montage('GSN-HydroCel-256')
 ch_names = ['E{}'.format(i) for i in range(1, 257)]
 info = mne.create_info(ch_names, 1, ch_types='eeg', montage=montage)
 layout = mne.channels.make_eeg_layout(info)
