@@ -87,10 +87,11 @@ def decode_window(X, y, clf=None, cv=None, sample_weight='auto', n_jobs='auto',
     if n_jobs == 'auto':
         try:
             import multiprocessing as mp
+            mp.set_start_method('forkserver')
             n_jobs = mp.cpu_count()
             logger.info(
                 'Autodetected number of jobs {}'.format(n_jobs))
-        except:
+        except Exception:
             logger.info('Cannot autodetect number of jobs')
             n_jobs = 1
     if clf is None:

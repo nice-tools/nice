@@ -20,6 +20,7 @@
 # License version 3 without disclosing the source code of your own
 # applications.
 #
+from pathlib import Path
 from collections import OrderedDict
 from .utils import h5_listdir
 from mne.externals.h5io import read_hdf5, write_hdf5
@@ -65,7 +66,7 @@ class Markers(OrderedDict):
         info = self.ch_info_
         marker_names = [
             meas._get_title() for meas in self.values() if isin_info(
-                info_source=info, info_target=meas.ch_info_) and
+                info_source=info, info_target=meas.ch_info_) and  # noqa
             'channels' in meas._axis_map]
         return marker_names
 
@@ -78,11 +79,11 @@ class Markers(OrderedDict):
         Parameters
         ----------
         marker_params : dict with reduction parameters
-            Each key of the dict should be of the form MarkerClass or 
+            Each key of the dict should be of the form MarkerClass or
             MarkerClass/comment. Each value should be a dictionary with two
             keys: 'reduction_func' and 'picks'.
 
-            reduction_func: list of dictionaries. Each dictionary should have 
+            reduction_func: list of dictionaries. Each dictionary should have
                 two keys: 'axis' and 'function'. The marker is going to be
                 reduced following the order of the list. Selecting the
                 corresponding axis and applying the corresponding function.
@@ -104,7 +105,7 @@ class Markers(OrderedDict):
         Returns
         -------
         out : dict
-            Each marker of the collection will be a key, with a value 
+            Each marker of the collection will be a key, with a value
             representing the marker value for each epoch (
                 np.ndarray of float, shape(n_epochs,))
         """
@@ -117,11 +118,11 @@ class Markers(OrderedDict):
             info = self.ch_info_
         markers_to_epochs = [
             meas for meas in self.values() if isin_info(
-                info_source=info, info_target=meas.ch_info_) and
+                info_source=info, info_target=meas.ch_info_) and  # noqa
             'epochs' in meas._axis_map]
-        n_markers = len(markers_to_epochs)
-        n_epochs = markers_to_epochs[0].data_.shape[
-            markers_to_epochs[0]._axis_map['epochs']]
+        # n_markers = len(markers_to_epochs)
+        # n_epochs = markers_to_epochs[0].data_.shape[
+        #     markers_to_epochs[0]._axis_map['epochs']]
         out = OrderedDict()
         for ii, meas in enumerate(markers_to_epochs):
             logger.info('Reducing {}'.format(meas._get_title()))
@@ -139,7 +140,7 @@ class Markers(OrderedDict):
             info = self.ch_info_
         markers_to_topo = [
             meas for meas in self.values() if isin_info(
-                info_source=info, info_target=meas.ch_info_) and
+                info_source=info, info_target=meas.ch_info_) and  # noqa
             'channels' in meas._axis_map]
         n_markers = len(markers_to_topo)
         if ch_picks is None:
@@ -171,6 +172,8 @@ class Markers(OrderedDict):
                 meas.compress(reduction_func)
 
     def save(self, fname, overwrite=False):
+        if isinstance(fname, Path):
+            fname = fname.as_posix()
         if not fname.endswith('-markers.hdf5'):
             logger.warning('Feature collections file name should end '
                            'with "-markers.hdf5". Some NICE markers '
@@ -242,7 +245,7 @@ def _get_reduction_params(marker_params, meas):
 
 
 def isin_info(info_source, info_target):
-    set_diff_ch = len(set(info_source['ch_names']) -
+    set_diff_ch = len(set(info_source['ch_names']) -  # noqa
                       set(info_target['ch_names']))
     is_compat = True
     if set_diff_ch > 0:

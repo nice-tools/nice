@@ -59,12 +59,12 @@ class BasePowerSpectralDensity(BaseMarker):
         if this_max is None:
             this_max = epochs.info['sfreq'] / 2
 
-        in_range = (self.estimator.fmin <= this_min and
+        in_range = (self.estimator.fmin <= this_min and  # noqa
                     self.estimator.fmax >= this_max)
         if not in_range:
             raise ValueError('Spectral frequencies do not match')
 
-        in_range = (self.estimator.tmin == self.tmin and
+        in_range = (self.estimator.tmin == self.tmin and  # noqa
                     self.estimator.tmax == self.tmax)
 
     def save(self, fname, overwrite=False):
@@ -74,7 +74,7 @@ class BasePowerSpectralDensity(BaseMarker):
 
         has_estimator = False
         estimator_name = self.estimator._get_title()
-        with h5py.File(fname) as h5fid:
+        with h5py.File(fname, 'r') as h5fid:
             if estimator_name in h5fid:
                 has_estimator = True
                 logger.info('PSDS Estimator already present in HDF5 file, '
@@ -215,7 +215,7 @@ class PowerSpectralDensity(BasePowerSpectralDensity):
             reduction_func, target, picks, return_axis=True)
         for func, ax in zip(funcs, axis):
             out = func(out, axis=0)
-            if (self.dB is True and self.normalize is False and
+            if (self.dB is True and self.normalize is False and  # noqa
                     ax == 'frequency'):
                 out = 10 * np.log10(out)
         return out

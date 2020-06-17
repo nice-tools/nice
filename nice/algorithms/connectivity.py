@@ -61,11 +61,12 @@ def epochs_compute_wsmi(epochs, kernel, tau, tmin=None, tmax=None,
     if n_jobs == 'auto':
         try:
             import multiprocessing as mp
+            mp.set_start_method('forkserver')
             import mkl
             n_jobs = int(mp.cpu_count() / mkl.get_max_threads())
             logger.info(
                 'Autodetected number of jobs {}'.format(n_jobs))
-        except:
+        except Exception:
             logger.info('Cannot autodetect number of jobs')
             n_jobs = 1
 
@@ -76,7 +77,7 @@ def epochs_compute_wsmi(epochs, kernel, tau, tmin=None, tmax=None,
         logger.info('Computing CSD')
         try:
             from pycsd import epochs_compute_csd
-        except:
+        except Exception:
             raise ValueError('PyCSD not available. '
                              'Please install this dependency.')
         csd_epochs = epochs_compute_csd(epochs, n_jobs=n_jobs)
@@ -121,7 +122,7 @@ def epochs_compute_wsmi(epochs, kernel, tau, tmin=None, tmax=None,
                 nthreads = mkl.get_max_threads()
                 logger.info(
                     'Autodetected number of threads {}'.format(nthreads))
-            except:
+            except Exception:
                 logger.info('Cannot autodetect number of threads')
                 nthreads = 1
         wsmi, smi, sym, count = jwsmi(fdata, kernel, tau, wts, nthreads)
@@ -150,11 +151,12 @@ def _wsmi_python(data, count, wts):
                     for sc2 in range(nsymbols):
                         if pxy[sc1, sc2] > 0:
                             aux = pxy[sc1, sc2] * np.log(
-                                pxy[sc1, sc2] / count[channel1, sc1, trial] /
+                                pxy[sc1, sc2] /  # noqa
+                                count[channel1, sc1, trial] /  # noqa
                                 count[channel2, sc2, trial])
                             smi[channel1, channel2, trial] += aux
-                            wsmi[channel1, channel2, trial] += (wts[sc1, sc2] *
-                                                                aux)
+                            wsmi[channel1, channel2, trial] += \
+                                (wts[sc1, sc2] * aux)
     wsmi = wsmi / np.log(nsymbols)
     smi = smi / np.log(nsymbols)
     return wsmi, smi

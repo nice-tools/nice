@@ -36,7 +36,7 @@ class BaseContainer(object):
 
     def _save_info(self, fname, overwrite=False):
         has_ch_info = False
-        with h5py.File(fname) as h5fid:
+        with h5py.File(fname, 'r') as h5fid:
             if 'nice/data/ch_info' in h5fid:
                 has_ch_info = True
                 logger.info('Channel info already present in HDF5 file, '
@@ -123,14 +123,15 @@ class BaseMarker(BaseContainer):
 
         Parameters
         ----------
-        reduction_func : list of dictionaries. 
-            Each dictionary should have two keys: 'axis' and 'function'. 
+        reduction_func : list of dictionaries.
+            Each dictionary should have two keys: 'axis' and 'function'.
             The marker is going to be reduced following the order of the list.
             Selecting the corresponding axis and applying the corresponding
             function.
-        picks : dictionary of axis to array. 
+        picks : dictionary of axis to array.
             Before appling the reduction function, the corresponding axis will
-            be subselected by picks. A value of None indicates all the elements.
+            be subselected by picks. A value of None indicates all the
+            elements.
 
         Example:
             reduction_func = [
@@ -248,7 +249,7 @@ class BaseTimeLocked(BaseMarker):
             exclude=['ch_info_', 'data_', 'epochs_'])
 
         has_epochs = False
-        with h5py.File(fname) as h5fid:
+        with h5py.File(fname, 'r') as h5fid:
             if 'nice/data/epochs' in h5fid:
                 has_epochs = True
                 logger.info('Epochs already present in HDF5 file, '

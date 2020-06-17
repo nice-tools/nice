@@ -198,25 +198,25 @@ def test_time_locked():
     _base_reduction_test(cnv, epochs)
 
     tmp = _TempDir()
-    with h5py.File(tmp + '/test.hdf5') as fid:
+    with h5py.File(tmp + '/test.hdf5', 'r') as fid:
         assert_true('nice/data/epochs' not in fid)
     ert = TimeLockedTopography(tmin=0.1, tmax=0.2)
     _erfp_io_test(tmp, ert, epochs, read_ert)
-    with h5py.File(tmp + '/test.hdf5') as fid:
+    with h5py.File(tmp + '/test.hdf5', 'r') as fid:
         assert_true(fid['nice/data/epochs'].keys() != [])
 
     tmp = _TempDir()
-    with h5py.File(tmp + '/test.hdf5') as fid:
+    with h5py.File(tmp + '/test.hdf5', 'r') as fid:
         assert_true('nice/data/epochs' not in fid)
     erc = TimeLockedContrast(tmin=0.1, tmax=0.2, condition_a='a',
                              condition_b='b')
     _erfp_io_test(tmp, erc, epochs, read_erc)
-    with h5py.File(tmp + '/test.hdf5') as fid:
+    with h5py.File(tmp + '/test.hdf5', 'r') as fid:
         assert_true('nice/data/epochs' in fid)
     erc = TimeLockedContrast(tmin=0.1, tmax=0.2, condition_a='a',
                              condition_b='b', comment='another_erp')
     _erfp_io_test(tmp, erc, epochs, read_erc, comment='another_erp')
-    with h5py.File(tmp + '/test.hdf5') as fid:
+    with h5py.File(tmp + '/test.hdf5', 'r') as fid:
         assert_true(fid['nice/data/epochs'].keys() != [])
 
 
@@ -493,11 +493,11 @@ def test_picking():
 
     topo_expected = np.array([
         1 + 6 + 11. + 2 + 7 + 12 + 3 + 8 + 13. + 4 + 9 + 14. + 5 + 10 + 15,
-        10 + 60 + 110 + 20 + 70 + 120 + 30 + 80 +
+        10 + 60 + 110 + 20 + 70 + 120 + 30 + 80 +  # noqa
         130. + 40 + 90 + 140. + 50 + 100 + 150,
-        100 + 600 + 1100 + 200 + 700 + 1200 +
+        100 + 600 + 1100 + 200 + 700 + 1200 +  # noqa
         300 + 800 + 1300 + 400 + 900 + 1400. + 500 + 1000 + 1500,
-        1000 + 6000 + 11000 + 2000 + 7000 + 12000 +
+        1000 + 6000 + 11000 + 2000 + 7000 + 12000 +  # noqa
         3000 + 8000 + 13000 + 4000 + 9000 + 14000. + 5000 + 10000 + 15000])
     topo_obtained = psd.reduce_to_topo(psd_red_fun, psd_channel_pick)
     assert_array_equal(topo_obtained, topo_expected)
@@ -508,7 +508,7 @@ def test_picking():
     scalar_obtained = wsmi.reduce_to_scalar(wsmi_red_fun, wsmi_channel_pick)
     assert_equal(scalar_obtained, scalar_expected)
 
-    scalar_expected = (10 + 60 + 110 + 20 + 70 + 120 +
+    scalar_expected = (10 + 60 + 110 + 20 + 70 + 120 +  # noqa
                        30 + 80 + 130. + 40 + 90 + 140. + 50 + 100 + 150)
     scalar_obtained = psd.reduce_to_scalar(psd_red_fun, psd_channel_pick)
     assert_equal(scalar_obtained, scalar_expected)
