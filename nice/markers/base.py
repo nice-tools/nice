@@ -20,6 +20,7 @@
 # License version 3 without disclosing the source code of your own
 # applications.
 #
+from pathlib import Path
 from ..utils import write_hdf5_mne_epochs, info_to_dict
 import numpy as np
 
@@ -36,11 +37,12 @@ class BaseContainer(object):
 
     def _save_info(self, fname, overwrite=False):
         has_ch_info = False
-        with h5py.File(fname, 'r') as h5fid:
-            if 'nice/data/ch_info' in h5fid:
-                has_ch_info = True
-                logger.info('Channel info already present in HDF5 file, '
-                            'will not be overwritten')
+        if fname.exists():
+            with h5py.File(fname, 'r') as h5fid:
+                if 'nice/data/ch_info' in h5fid:
+                    has_ch_info = True
+                    logger.info('Channel info already present in HDF5 file, '
+                                'will not be overwritten')
 
         if not has_ch_info:
             logger.info('Writing channel info to HDF5 file')
@@ -53,6 +55,8 @@ class BaseContainer(object):
                 k not in exclude}
 
     def save(self, fname, overwrite=False):
+        if not isinstance(fname, Path):
+            fname = Path(fname)
         self._save_info(fname, overwrite=overwrite)
         save_vars = self._get_save_vars(exclude=['ch_info_'])
         write_hdf5(
@@ -244,6 +248,8 @@ class BaseTimeLocked(BaseMarker):
             'epoch-wise ({})'.format(self._get_title()))
 
     def save(self, fname, overwrite=False):
+        if not isinstance(fname, Path):
+            fname = Path(fname)
         self._save_info(fname, overwrite=overwrite)
         save_vars = self._get_save_vars(
             exclude=['ch_info_', 'data_', 'epochs_'])

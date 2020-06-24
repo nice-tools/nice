@@ -20,6 +20,7 @@
 # License version 3 without disclosing the source code of your own
 # applications.
 #
+from pathlib import Path
 from copy import deepcopy
 from collections import OrderedDict
 
@@ -68,6 +69,8 @@ class BasePowerSpectralDensity(BaseMarker):
                     self.estimator.tmax == self.tmax)
 
     def save(self, fname, overwrite=False):
+        if not isinstance(fname, Path):
+            fname = Path(fname)
         self._save_info(fname, overwrite=overwrite)
         save_vars = self._get_save_vars(
             exclude=['ch_info_', 'estimator', 'data_'])
@@ -128,6 +131,8 @@ class PowerSpectralDensityEstimator(BaseContainer):
         self.data_norm_ = self.data_ / self.data_.sum(axis=-1)[..., None]
 
     def save(self, fname, overwrite=False):
+        if not isinstance(fname, Path):
+            fname = Path(fname)
         self._save_info(fname, overwrite=overwrite)
         save_vars = self._get_save_vars(exclude=['ch_info_', 'data_norm_'])
         write_hdf5(

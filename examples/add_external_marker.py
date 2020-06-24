@@ -18,7 +18,7 @@ References
 
 # Author: Federico Raimondo <federaimondo@gmail.com>
 
-
+from pathlib import Path
 from collections import OrderedDict
 
 from mne.externals.h5io import read_hdf5, write_hdf5
@@ -79,6 +79,8 @@ class MyCustomMarker(BaseMarker):
         Save method should be overriden to use the
         custom title param.
         """
+        if not isinstance(fname, Path):
+            fname = Path(fname)
         self._save_info(fname, overwrite=overwrite)
         save_vars = self._get_save_vars(exclude=['ch_info_'])
         write_hdf5(
