@@ -75,12 +75,14 @@ def epochs_compute_wsmi(epochs, kernel, tau, tmin=None, tmax=None,
         csd_epochs = epochs
     else:
         logger.info('Computing CSD')
-        try:
-            from pycsd import epochs_compute_csd
-        except Exception:
-            raise ValueError('PyCSD not available. '
-                             'Please install this dependency.')
-        csd_epochs = epochs_compute_csd(epochs, n_jobs=n_jobs)
+        # try:
+        #     from pycsd import epochs_compute_csd
+        # except Exception:
+        #     raise ValueError('PyCSD not available. '
+        #                      'Please install this dependency.')
+        # csd_epochs = epochs_compute_csd(epochs, n_jobs=n_jobs)
+        csd_epochs = mne.preprocessing.compute_current_source_density(
+            epochs, lambda2=1e-5)
 
     freq = csd_epochs.info['sfreq']
 

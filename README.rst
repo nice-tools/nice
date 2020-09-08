@@ -39,15 +39,13 @@ The required dependencies to build the software are:
 * numpy >= 1.11.1
 * h5py >= 2.6.0
 
-And principally, mne-python >= 0.13:
+And principally, mne-python >= 0.20:
 http://mne-tools.github.io/stable/index.html
 
 
 Some functions require pandas >= 0.7.3.
 
 To run the tests you will also need nose >= 0.10.
-
-To use wSMI with CSD you need pycsd: https://github.com/nice-tools/pycsd/
 
 Optimizations (optional)
 ^^^^^^^^^^^^^^^^^^^^^^^^
