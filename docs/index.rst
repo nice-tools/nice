@@ -39,15 +39,13 @@ The required dependencies to build the software are:
 * numpy >= 1.11.1
 * h5py >= 2.6.0
 
-And principally, mne-python >= 0.13:
+And principally, mne-python >= 0.20:
 http://mne-tools.github.io/stable/index.html
 
 
 Some functions require pandas >= 0.7.3.
 
 To run the tests you will also need nose >= 0.10.
-
-To use wSMI with CSD you need pycsd: https://github.com/nice-tools/pycsd/
 
 Optimizations (optional)
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -65,6 +63,15 @@ To build, go to the nice soure code directory and do::
     CC=clang make
 
 Then set backend='c' or 'openmp' instead of the defalut backend='python' in markers functions
+
+If running on osx 10.15, then you might face this error::
+
+    /anaconda3/include/python3.7m/Python.h:25:10: fatal error: 'stdio.h' file not found
+
+Running this command will fix it::
+
+    sudo ln -s /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/* /usr/local/include/
+
 
 Running the test suite
 ^^^^^^^^^^^^^^^^^^^^^^
