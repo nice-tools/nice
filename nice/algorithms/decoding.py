@@ -96,7 +96,7 @@ def decode_window(X, y, clf=None, cv=None, sample_weight='auto', n_jobs='auto',
             n_jobs = 1
     if clf is None:
         scaler = StandardScaler()
-        transform = SelectPercentile(f_classif, 10)
+        transform = SelectPercentile(f_classif, precentile=10)
         svc = SVC(C=1, kernel='linear', probability=True)
         clf = Pipeline([('scaler', scaler),
                         ('anova', transform),
