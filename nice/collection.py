@@ -166,6 +166,27 @@ class Markers(OrderedDict):
 
         return out
 
+    def _reduce_to_targets(self, marker_params, targets):
+        logger.info(f'Reducing to multiple targets: {targets}')
+        self._check_marker_params_keys(marker_params)
+        ch_picks = mne.pick_types(self.ch_info_, eeg=True, meg=True)
+        if ch_picks is not None:  # XXX think if info is needed down-stream
+            info = mne.io.pick.pick_info(self.ch_info_, ch_picks, copy=True)
+        else:
+            info = self.ch_info_
+        markers_with_targets = [
+            meas for meas in self.values()
+            if isin_info(info_source=info, info_target=meas.ch_info_)
+                and all(t in meas._axis_map for t in targets)]  # noqa
+
+        out = OrderedDict()
+        for ii, meas in enumerate(markers_with_targets):
+            logger.info('Reducing {}'.format(meas._get_title()))
+            this_params = _get_reduction_params(marker_params, meas)
+            this_params['target'] = targets
+            out[meas._get_title()] = meas._reduce_to(**this_params)
+        return out
+
     def compress(self, reduction_func):
         for meas in self.values():
             if not isinstance(meas, BaseTimeLocked):
@@ -241,6 +262,8 @@ def _get_reduction_params(marker_params, meas):
             out = marker_params[part]
     if len(out) == 0:
         raise ValueError('No reduction for {}'.format(full))
+    if 'picks' not in out:
+        out['picks'] = None
     return out
 
 
