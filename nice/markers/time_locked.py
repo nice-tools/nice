@@ -43,8 +43,9 @@ class ContingentNegativeVariation(BaseMarker):
         BaseMarker.__init__(self, tmin, tmax, comment)
 
     def _fit(self, epochs):
-        cnv = epochs_compute_cnv(epochs, self.tmin, self.tmax)
-        self.data_ = cnv
+        slopes, intercepts = epochs_compute_cnv(epochs, self.tmin, self.tmax)
+        self.data_ = slopes
+        self.intercepts_ = intercepts
 
     @property
     def _axis_map(self):

@@ -56,7 +56,8 @@ def epochs_compute_cnv(epochs, tmin=None, tmax=None):
     n_epochs = len(epochs.events)
     n_channels = len(picks)
     # we reduce over time samples
-    out = np.zeros((n_epochs, n_channels))
+    slopes = np.zeros((n_epochs, n_channels))
+    intercepts = np.zeros((n_epochs, n_channels))
     if tmax is None:
         tmax = epochs.times[-1]
     if tmin is None:
@@ -77,6 +78,7 @@ def epochs_compute_cnv(epochs, tmin=None, tmax=None):
     for ii, epoch in enumerate(epochs):
         y = epoch[picks][:, fit_range].T  # time is samples
         betas, _, _, _ = linalg.lstsq(a=design_matrix, b=y * scales)
-        out[ii] = betas[1]  # ignore intercept
+        intercepts[ii] = betas[0]
+        slopes[ii] = betas[1]
 
-    return out
+    return slopes, intercepts
