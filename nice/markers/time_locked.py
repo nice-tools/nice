@@ -247,8 +247,8 @@ class TimeDecoding(BaseMarker):
     @property
     def _axis_map(self):
         return OrderedDict([
-            ('folds', 0)
-            ('times', 1),
+            ('folds', 0),
+            ('times', 1)
         ])
 
 
@@ -298,9 +298,9 @@ class GeneralizationDecoding(BaseMarker):
     @property
     def _axis_map(self):
         return OrderedDict([
-            ('folds', 0)
+            ('folds', 0),
             ('train_times', 1),
-            ('test_times', 2),
+            ('test_times', 2)
         ])
 
 
