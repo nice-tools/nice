@@ -50,17 +50,24 @@ To run the tests you will also need nose >= 0.10.
 Optimizations (optional)
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Aditionally, we ship optimized versions of some algorithms.
-They can be compiled using the conda CLANG and openmp.
-Both can be installed as follows::
+Aditionally, we ship optimized versions of some algorithms. BUT they must be compiled first.
 
-    conda install clang
-    conda install openmp
+Linux (Using anaconda)::
 
+    conda install gcc_linux-64
+
+To build, go to the nice soure code directory and do::
+
+    make
+
+MacOSX (USing anaconda)::
+
+    conda install clang_osx-64
 
 To build, go to the nice soure code directory and do::
 
     CC=clang make
+
 
 Then set backend='c' or 'openmp' instead of the defalut backend='python' in markers functions
 
