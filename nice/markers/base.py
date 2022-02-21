@@ -21,13 +21,13 @@
 # applications.
 #
 from pathlib import Path
+from packaging import version
 from ..utils import write_hdf5_mne_epochs, info_to_dict
 import numpy as np
 
 from mne.utils import logger
-from mne.epochs import _compare_epochs_infos
 from mne.io.meas_info import Info
-from mne.externals.h5io import write_hdf5, read_hdf5
+from h5io import write_hdf5, read_hdf5
 import h5py
 
 
@@ -317,7 +317,12 @@ def _read_container(klass, fname, comment='default'):
 
 
 def _check_epochs_consistency(info1, info2, shape1, shape2):
-    _compare_epochs_infos(info1, info2, 2)
+    if version.parse(mne.__version__) < version.parse('0.24'):
+        from mne.epochs import _compare_epochs_infos
+        _compare_epochs_infos(info1, info2, 2)
+    else:
+        from mne.io.meas_info import _ensure_infos_match # mne version 0.24.1
+        _ensure_infos_match(info1, info2, 'epochs[2]')
     np.testing.assert_array_equal(shape1, shape2)
 
 

@@ -29,7 +29,7 @@ import h5py
 import numpy as np
 
 from mne.utils import logger
-from mne.externals.h5io import write_hdf5
+from h5io import write_hdf5
 
 from .base import (BaseMarker, BaseContainer, _get_title, _read_container)
 from ..algorithms.spectral import psd_welch

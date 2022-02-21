@@ -29,7 +29,7 @@ import h5py
 from mne import create_info
 from mne.channels import make_standard_montage
 from mne.io import RawArray
-from mne.externals.h5io import write_hdf5
+from h5io import write_hdf5
 
 from six import string_types
 

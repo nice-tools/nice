@@ -21,7 +21,7 @@ References
 from pathlib import Path
 from collections import OrderedDict
 
-from mne.externals.h5io import read_hdf5, write_hdf5
+from h5io import read_hdf5, write_hdf5
 from mne.io.meas_info import Info
 from mne.utils import _TempDir
 
