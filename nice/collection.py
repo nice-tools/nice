@@ -23,7 +23,7 @@
 from pathlib import Path
 from collections import OrderedDict
 from .utils import h5_listdir
-from mne.externals.h5io import read_hdf5, write_hdf5
+from h5io import read_hdf5, write_hdf5
 from .markers.base import BaseMarker, BaseTimeLocked
 from .markers.spectral import BasePowerSpectralDensity, read_psd_estimator
 import sys
