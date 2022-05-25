@@ -19,15 +19,21 @@
 # develop commercial activities as mentioned in the GNU Affero General Public
 # License version 3 without disclosing the source code of your own applications.
 #
+import os
 from distutils.core import setup, Extension
 
 from numpy import get_include
 
+conda_env = os.getenv('CONDA_PREFIX', None)
+
 include = [get_include(), '.']
+
+if conda_env is not None:
+      include = [f'{conda_env}/include'] + include
 
 module1 = Extension('ompk',
                     sources=['ompk.c', 'komplexity.c'],
-                    extra_compile_args=['-fopenmp', '-std=c99', '-O3'],
+                    extra_compile_args=['-lz', '-fopenmp', '-std=c99', '-O3'],
                     extra_link_args=['-lz', '-fopenmp'],
                     include_dirs=include)
 
