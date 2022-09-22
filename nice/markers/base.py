@@ -25,6 +25,7 @@ from packaging import version
 from ..utils import write_hdf5_mne_epochs, info_to_dict
 import numpy as np
 
+import mne
 from mne.utils import logger
 from mne.io.meas_info import Info
 from h5io import write_hdf5, read_hdf5

@@ -23,7 +23,6 @@
 import zlib
 import numpy as np
 
-from nose.tools import assert_equal
 from numpy.testing import assert_array_equal
 
 import mne
@@ -103,12 +102,12 @@ def test_komplexity_python():
     """ Test simple symbolic transformation """
     for chan in range(n_channels):
         symb = _symb_python(test_data[0, chan, :], n_bins)
-        assert_equal(symb.decode('ascii'), test_data_symb[chan])
+        assert symb.decode('ascii') == test_data_symb[chan]
 
     # Test simple symbolic transformation with more bins
     for chan in range(n_channels):
         symb = _symb_python(test_data[0, chan, :], 4)
-        assert_equal(symb.decode('ascii'), test_data_symb_4bin[chan])
+        assert symb.decode('ascii') == test_data_symb_4bin[chan]
 
     # Test compressions
     komp = _komplexity_python(test_data, n_bins)
@@ -135,8 +134,3 @@ def test_komplexity_omp():
 #     k1 = epochs_compute_komplexity(epochs, nbins=32, backend='python')
 #     k2 = epochs_compute_komplexity(epochs, nbins=32, backend='openmp')
 #     assert_array_equal(k1, k2)
-
-
-if __name__ == "__main__":
-    import nose
-    nose.run(defaultTest=__name__)
