@@ -58,7 +58,7 @@ preload = True
 
 def _get_data():
     raw = mne.io.Raw(raw_fname)
-    raw.info['lowpass'] = 70.  # To avoid warning
+    # raw.info['lowpass'] = 70.  # To avoid warning
     events = mne.read_events(event_name)
     picks = mne.pick_types(raw.info, meg=True, eeg=True, stim=True,
                            ecg=True, eog=True, include=['STI 014'],
@@ -133,4 +133,4 @@ def test_collecting_feature():
     tmp_fname = tmp + '/test_markers.hdf5'
     markers.save(tmp_fname)
     markers3 = read_markers(tmp_fname)
-    assert_true(pe._get_title() in markers3)
+    assert pe._get_title() in markers3
