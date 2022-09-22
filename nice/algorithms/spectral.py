@@ -23,9 +23,40 @@
 import numpy as np
 
 # XXX: Copy of MNE welch method, since nperseg cannot be passed to scipy.signal
-from mne.time_frequency.psd import _check_psd_data, _check_nfft
-from mne.utils import logger
+from mne.time_frequency.psd import _check_nfft
+from mne.utils import logger, _time_mask
+from mne.io.pick import _picks_to_idx
 from mne.parallel import parallel_func
+
+
+def _check_psd_data(inst, tmin, tmax, picks, proj, reject_by_annotation=False):
+    """Check PSD data / pull arrays from inst."""
+    from mne.io.base import BaseRaw
+    from mne.epochs import BaseEpochs
+    from mne.evoked import Evoked
+    if not isinstance(inst, (BaseEpochs, BaseRaw, Evoked)):
+        raise ValueError(
+            f'inst must be an instance of Epochs, Raw, or Evoked. Got '
+            f'{type(inst)}'
+        )
+
+    time_mask = _time_mask(inst.times, tmin, tmax, sfreq=inst.info['sfreq'])
+    picks = _picks_to_idx(inst.info, picks, 'data', with_ref_meg=False)
+    if proj:
+        # Copy first so it's not modified
+        inst = inst.copy().apply_proj()
+
+    sfreq = inst.info['sfreq']
+    if isinstance(inst, BaseRaw):
+        start, stop = np.where(time_mask)[0][[0, -1]]
+        rba = 'NaN' if reject_by_annotation else None
+        data = inst.get_data(picks, start, stop + 1, reject_by_annotation=rba)
+    elif isinstance(inst, BaseEpochs):
+        data = inst.get_data(picks=picks)[:, :, time_mask]
+    else:  # Evoked
+        data = inst.data[picks][:, time_mask]
+
+    return data, sfreq
 
 
 def _pwelch(epoch, nperseg, noverlap, nfft, fs, freq_mask, welch_fun):

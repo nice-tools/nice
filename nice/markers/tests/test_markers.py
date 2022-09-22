@@ -68,7 +68,7 @@ preload = True
 
 def _get_data():
     raw = mne.io.Raw(raw_fname)
-    raw.info['lowpass'] = 70.  # To avoid warning
+    # raw.info['lowpass'] = 70.  # To avoid warning
     events = mne.read_events(event_name)
     picks = mne.pick_types(raw.info, meg=True, eeg=True, stim=True,
                            ecg=True, eog=True, include=['STI 014'],
@@ -81,7 +81,7 @@ def _get_data():
 
 def _get_decoding_data():
     raw = mne.io.Raw(raw_fname)
-    raw.info['lowpass'] = 70.  # To avoid warning
+    # raw.info['lowpass'] = 70.  # To avoid warning
     events = mne.read_events(event_name)
     picks = mne.pick_types(raw.info, meg=True, eeg=True, stim=True,
                            ecg=True, eog=True, include=['STI 014'],
@@ -185,7 +185,7 @@ def test_time_locked():
     """Test computation of time locked markers"""
 
     raw = mne.io.Raw(raw_fname)
-    raw.info['lowpass'] = 70.  # To avoid warning
+    # raw.info['lowpass'] = 70.  # To avoid warning
     events = mne.read_events(event_name)
     picks = mne.pick_types(raw.info, meg=True, eeg=True, stim=True,
                            ecg=True, eog=True, include=['STI 014'],
