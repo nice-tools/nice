@@ -23,8 +23,6 @@
 
 import os.path as op
 
-from nose.tools import assert_equal, assert_true
-
 from numpy.testing import assert_array_equal
 import numpy as np
 import warnings
@@ -81,7 +79,7 @@ def _compare_instance(inst1, inst2):
         elif isinstance(v, mne.io.meas_info.Info):
             pass
         else:
-            assert_equal(v, v2)
+            assert v == v2
 
 
 def test_collecting_feature():
@@ -106,26 +104,26 @@ def test_collecting_feature():
     markers = Markers(markers_list)
     # check states and names
     for name, marker in markers.items():
-        assert_true(not any(k.endswith('_') for k in vars(marker)))
-        assert_equal(name, marker._get_title())
+        assert not any(k.endswith('_') for k in vars(marker))
+        assert name == marker._get_title()
 
     # check order
-    assert_equal(list(markers.values()), markers_list)
+    assert list(markers.values()) == markers_list
 
     # check fit
     markers.fit(epochs)
     for t_marker in markers_list:
-        assert_true(any(k.endswith('_') for k in vars(t_marker)))
+        assert any(k.endswith('_') for k in vars(t_marker))
 
     tmp = _TempDir()
     tmp_fname = tmp + '/test_markers.hdf5'
     markers.save(tmp_fname)
     markers2 = read_markers(tmp_fname)
     for ((k1, v1), (k2, v2)) in zip(markers.items(), markers2.items()):
-        assert_equal(k1, k2)
-        assert_equal(
+        assert k1 == k2
+        assert (
             {k: v for k, v in vars(v1).items() if not k.endswith('_') and
-             not k == 'estimator'},
+             not k == 'estimator'} ==
             {k: v for k, v in vars(v2).items() if not k.endswith('_') and
              not k == 'estimator'})
     pe = PermutationEntropy().fit(epochs)
@@ -136,8 +134,3 @@ def test_collecting_feature():
     markers.save(tmp_fname)
     markers3 = read_markers(tmp_fname)
     assert_true(pe._get_title() in markers3)
-
-
-if __name__ == "__main__":
-    import nose
-    nose.run(defaultTest=__name__)

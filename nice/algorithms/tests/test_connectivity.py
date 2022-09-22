@@ -218,8 +218,3 @@ def test_wsmi():
     assert_array_equal(count_3, count_4)
     assert_almost_equal(wsmi_3, wsmi_4)
     assert_almost_equal(smi_3, smi_4)
-
-
-if __name__ == "__main__":
-    import nose
-    nose.run(defaultTest=__name__)

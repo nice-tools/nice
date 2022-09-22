@@ -24,7 +24,7 @@
 
 import os.path as op
 
-from nose.tools import assert_equal, assert_true, assert_raises
+import pytest
 
 from numpy.testing import assert_array_equal
 import numpy as np
@@ -103,7 +103,7 @@ def _compare_values(v, v2):
     elif isinstance(v, PowerSpectralDensityEstimator):
         _compare_instance(v, v2)
     else:
-        assert_equal(v, v2)
+        assert v == v2
 
 
 def _compare_instance(inst1, inst2):
@@ -136,10 +136,10 @@ def _base_reduction_test(inst, epochs):
         sc2 = np.mean(np.mean(np.mean(inst.data_, axis=0), axis=0), axis=0)
     else:
         sc2 = np.mean(np.mean(inst.data_, axis=0), axis=0)
-    assert_equal(sc, sc2)
+    assert sc == sc2
     topo = inst.reduce_to_topo(None)
     topo_chans = len(mne.io.pick.pick_types(epochs.info, meg=True, eeg=True))
-    assert_equal(topo.shape, (topo_chans,))
+    assert topo.shape == (topo_chans,)
 
 
 def _base_compression_test(inst, epochs):
@@ -175,7 +175,7 @@ def test_spectral():
     out = np.mean(out, axis=-1)
     out = np.mean(out, axis=-1)
     scalar = psd.reduce_to_scalar(reduction_func)
-    assert_equal(scalar, out)
+    assert scalar == out
     # TODO: Fix this test
     # _base_reduction_test(psd, epochs)
     # _base_compression_test(psd, epochs)
@@ -199,25 +199,25 @@ def test_time_locked():
 
     tmp = _TempDir()
     # with h5py.File(tmp + '/test.hdf5', 'r') as fid:
-    #     assert_true('nice/data/epochs' not in fid)
+    #     assert 'nice/data/epochs' not in fid
     ert = TimeLockedTopography(tmin=0.1, tmax=0.2)
     _erfp_io_test(tmp, ert, epochs, read_ert)
     with h5py.File(tmp + '/test.hdf5', 'r') as fid:
-        assert_true(fid['nice/data/epochs'].keys() != [])
+        assert fid['nice/data/epochs'].keys() != []
 
     tmp = _TempDir()
     # with h5py.File(tmp + '/test.hdf5', 'r') as fid:
-    #     assert_true('nice/data/epochs' not in fid)
+    #     assert 'nice/data/epochs' not in fid
     erc = TimeLockedContrast(tmin=0.1, tmax=0.2, condition_a='a',
                              condition_b='b')
     _erfp_io_test(tmp, erc, epochs, read_erc)
     with h5py.File(tmp + '/test.hdf5', 'r') as fid:
-        assert_true('nice/data/epochs' in fid)
+        assert 'nice/data/epochs' in fid
     erc = TimeLockedContrast(tmin=0.1, tmax=0.2, condition_a='a',
                              condition_b='b', comment='another_erp')
     _erfp_io_test(tmp, erc, epochs, read_erc, comment='another_erp')
     with h5py.File(tmp + '/test.hdf5', 'r') as fid:
-        assert_true(fid['nice/data/epochs'].keys() != [])
+        assert fid['nice/data/epochs'].keys() != []
 
 
 def test_komplexity():
@@ -386,8 +386,8 @@ def test_picking():
     extreme_topo_obtained = ert.reduce_to_topo(red_fun, extreme_picks)
     assert_array_equal(extreme_topo_obtained, extreme_topo_expected)
 
-    assert_raises(
-        ValueError, wsmi.reduce_to_topo, wsmi_red_fun, extreme_picks)
+    with pytest.raises(ValueError):
+        wsmi.reduce_to_topo(wsmi_red_fun, extreme_picks)
     extreme_topo_obtained = wsmi.reduce_to_topo(
         wsmi_red_fun, wsmi_extreme_picks)
     assert_array_equal(extreme_topo_obtained, extreme_topo_expected)
@@ -398,24 +398,24 @@ def test_picking():
 
     extreme_scalar_expected = 12 + 20. + 12000 + 20000.
     extreme_scalar_obtained = ert.reduce_to_scalar(red_fun, extreme_picks)
-    assert_equal(extreme_scalar_obtained, extreme_scalar_expected)
+    assert extreme_scalar_obtained == extreme_scalar_expected
 
     extreme_scalar_obtained = wsmi.reduce_to_scalar(
         wsmi_red_fun, wsmi_extreme_picks)
-    assert_equal(extreme_scalar_obtained, extreme_scalar_expected)
+    assert extreme_scalar_obtained == extreme_scalar_expected
 
     extreme_scalar_expected = 80. + 80000.
     extreme_scalar_obtained = psd.reduce_to_scalar(
         psd_red_fun, psd_extreme_picks)
-    assert_equal(extreme_scalar_obtained, extreme_scalar_expected)
+    assert extreme_scalar_obtained == extreme_scalar_expected
 
     extreme_time_expected = np.array(
         [12 + 12000., 14 + 14000., 16 + 16000., 18 + 18000., 20 + 20000.])
     extreme_time_obtained = ert._reduce_to(red_fun, 'times', extreme_picks)
     assert_array_equal(extreme_time_obtained, extreme_time_expected)
 
-    assert_raises(
-        ValueError, psd._reduce_to, psd_red_fun, 'times', extreme_picks)
+    with pytest.raises(ValueError):
+        psd._reduce_to(psd_red_fun, 'times', extreme_picks)
 
     picks = {
         'channels': np.array([1, 3]),
@@ -451,13 +451,13 @@ def test_picking():
 
     scalar_expected = 90 + 130 + 150. + 9000 + 13000 + 15000.
     scalar_obtained = ert.reduce_to_scalar(red_fun, picks)
-    assert_equal(scalar_obtained, scalar_expected)
+    assert scalar_obtained == scalar_expected
     scalar_obtained = wsmi.reduce_to_scalar(wsmi_red_fun, wsmi_picks)
-    assert_equal(scalar_obtained, scalar_expected)
+    assert scalar_obtained == scalar_expected
 
     scalar_expected = 550. + 55000.
     scalar_obtained = psd.reduce_to_scalar(psd_red_fun, psd_picks)
-    assert_equal(scalar_obtained, scalar_expected)
+    assert scalar_obtained == scalar_expected
 
     time_expected = np.array(
         [70 + 7000., 90 + 9000., 110 + 11000., 130 + 13000., 150 + 15000.])
@@ -504,22 +504,17 @@ def test_picking():
 
     scalar_expected = 30 + 80 + 130. + 40 + 90 + 140
     scalar_obtained = ert.reduce_to_scalar(red_fun, channel_pick)
-    assert_equal(scalar_obtained, scalar_expected)
+    assert scalar_obtained == scalar_expected
     scalar_obtained = wsmi.reduce_to_scalar(wsmi_red_fun, wsmi_channel_pick)
-    assert_equal(scalar_obtained, scalar_expected)
+    assert scalar_obtained == scalar_expected
 
     scalar_expected = (10 + 60 + 110 + 20 + 70 + 120 +  # noqa
                        30 + 80 + 130. + 40 + 90 + 140. + 50 + 100 + 150)
     scalar_obtained = psd.reduce_to_scalar(psd_red_fun, psd_channel_pick)
-    assert_equal(scalar_obtained, scalar_expected)
+    assert scalar_obtained == scalar_expected
 
     time_expected = np.array(
         [10 + 60 + 110., 20 + 70 + 120., 30 + 80 + 130., 40 + 90 + 140.,
          50 + 100 + 150.])
     time_obtained = ert._reduce_to(red_fun, 'times', channel_pick)
     assert_array_equal(time_obtained, time_expected)
-
-
-if __name__ == "__main__":
-    import nose
-    nose.run(defaultTest=__name__)

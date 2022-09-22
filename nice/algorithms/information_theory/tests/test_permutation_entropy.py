@@ -23,7 +23,7 @@
 import numpy as np
 
 from numpy.testing import (assert_array_equal, assert_almost_equal)
-from nose.tools import assert_raises
+import pytest
 
 import mne
 
@@ -148,7 +148,7 @@ def test_pe():
     assert_array_equal(test_data_symb, symb)
 
     # Test error with not enough data
-    with assert_raises(ValueError):
+    with pytest.raises(ValueError):
         symb, count = _symb_python(test_data_t1, kernel=3, tau=8)
 
     # Test simple symbolic transformation for tau 8
@@ -174,7 +174,3 @@ def test_pe():
     assert_almost_equal(pe_1, pe_2)
     assert_almost_equal(pe_1, pe_2)
 
-
-if __name__ == "__main__":
-    import nose
-    nose.run(defaultTest=__name__)

@@ -52,8 +52,3 @@ def test_decode_window():
     X = epochs.get_data()
     y = epochs.events[:, 2]
     probas, predictions, scores = decode_window(X, y)
-
-
-if __name__ == "__main__":
-    import nose
-    nose.run(defaultTest=__name__)

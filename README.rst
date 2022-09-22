@@ -45,7 +45,7 @@ http://mne-tools.github.io/stable/index.html
 
 Some functions require pandas >= 0.7.3.
 
-To run the tests you will also need nose >= 0.10.
+To run the tests you will also need pytest
 
 Optimizations (optional)
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -83,10 +83,10 @@ Running this command will fix it::
 Running the test suite
 ^^^^^^^^^^^^^^^^^^^^^^
 
-To run the test suite, you need nosetests and the coverage modules.
+To run the test suite, you need pytest and the coverage modules.
 Run the test suite using::
 
-    nosetests
+    pytest
 
 from the root of the project.
 
