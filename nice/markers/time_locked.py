@@ -312,7 +312,7 @@ def _prepare_sample_weights(epochs, condition_a_mask, condition_b_mask):
     count = Counter(epochs.events[:, 2])
     id_event = {v: k for k, v in epochs.event_id.items()}
     class_weights = {id_event[k]: 1. / v for k, v in count.items()}
-    sample_weight = np.zeros(len(epochs.events), dtype=np.float)
+    sample_weight = np.zeros(len(epochs.events), dtype=float)
     for k, v in epochs.event_id.items():
         this_index = epochs.events[:, 2] == v
         sample_weight[this_index] = class_weights[k]
