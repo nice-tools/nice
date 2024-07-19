@@ -298,7 +298,7 @@ class PowerSpectralDensitySummary(BasePowerSpectralDensity):
         idx = np.argmin((cumulative_spectra - self.percentile) ** 2, axis=-1)
 
         if this_psds.ndim > 2:
-            data = np.zeros_like(idx, dtype=np.float)
+            data = np.zeros_like(idx, dtype=float)
             for iepoch in range(cumulative_spectra.shape[0]):
                 data[iepoch] = freqs[idx[iepoch]]
         else:

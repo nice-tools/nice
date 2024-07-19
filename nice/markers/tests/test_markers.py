@@ -294,7 +294,7 @@ def test_generalization_decoding():
     _base_io_test(gd, epochs, read_gd)
 
 
-picking_data = np.zeros((3, 4, 5), dtype=np.float)
+picking_data = np.zeros((3, 4, 5), dtype=float)
 for i in range(4):
     picking_data[:, i, :] = np.array([
         [1, 2, 3, 4, 5], [6, 7, 8, 9, 10], [11, 12, 13, 14, 15]
