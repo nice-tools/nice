@@ -25,7 +25,7 @@ import numpy as np
 # XXX: Copy of MNE welch method, since nperseg cannot be passed to scipy.signal
 from mne.time_frequency.psd import _check_nfft
 from mne.utils import logger, _time_mask
-from mne.io.pick import _picks_to_idx
+from mne import pick_types
 from mne.parallel import parallel_func
 
 
@@ -41,7 +41,7 @@ def _check_psd_data(inst, tmin, tmax, picks, proj, reject_by_annotation=False):
         )
 
     time_mask = _time_mask(inst.times, tmin, tmax, sfreq=inst.info['sfreq'])
-    picks = _picks_to_idx(inst.info, picks, 'data', with_ref_meg=False)
+    picks = mne.pick_types(inst.info, eeg=True, meg=False)
     if proj:
         # Copy first so it's not modified
         inst = inst.copy().apply_proj()

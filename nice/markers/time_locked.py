@@ -25,7 +25,7 @@ from collections import Counter, OrderedDict
 import numpy as np
 
 from mne.utils import _time_mask
-from mne.io.pick import pick_types
+from mne import pick_types
 
 from .base import BaseMarker, BaseTimeLocked
 

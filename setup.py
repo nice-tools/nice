@@ -26,7 +26,7 @@ import os
 from os import path as op
 
 import setuptools  # noqa; we are using a setuptools namespace
-from numpy.distutils.core import setup
+from setuptools import setup
 from setuptools import find_packages
 
 # get the version (don't import mne here, so dependencies are not needed)

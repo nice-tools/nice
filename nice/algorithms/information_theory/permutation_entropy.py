@@ -49,7 +49,7 @@ def epochs_compute_pe(epochs, kernel, tau, tmin=None, tmax=None,
 
     freq = epochs.info['sfreq']
 
-    picks = mne.io.pick.pick_types(epochs.info, meg=True, eeg=True)
+    picks = mne.pick_types(epochs.info, meg=True, eeg=True)
 
     data = epochs.get_data()[:, picks, ...]
     n_epochs = len(data)

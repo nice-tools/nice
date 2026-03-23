@@ -29,7 +29,7 @@ from .markers.spectral import BasePowerSpectralDensity, read_psd_estimator
 import sys
 import inspect
 import mne
-from mne.io.meas_info import Info
+from mne import Info
 from mne.utils import logger
 # from mne.parallel import parallel_func
 import numpy as np

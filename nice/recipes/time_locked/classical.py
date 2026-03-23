@@ -24,7 +24,7 @@ import numpy as np
 from scipy import linalg
 
 import mne
-from mne.io.pick import _picks_by_type, pick_info
+from mne import pick_types, pick_info
 from mne.defaults import _handle_default
 from mne.utils import _time_mask
 

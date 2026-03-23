@@ -73,7 +73,7 @@ def epochs_compute_wsmi(epochs, kernel, tau, tmin=None, tmax=None,
     if 'bypass_csd' in method_params and method_params['bypass_csd'] is True:
         logger.info('Bypassing CSD')
         csd_epochs = epochs
-        picks = mne.io.pick.pick_types(csd_epochs.info, meg=True, eeg=True)
+        picks = mne.pick_types(csd_epochs.info, meg=True, eeg=True)
     else:
         logger.info('Computing CSD')
         # try:
@@ -84,7 +84,7 @@ def epochs_compute_wsmi(epochs, kernel, tau, tmin=None, tmax=None,
         # csd_epochs = epochs_compute_csd(epochs, n_jobs=n_jobs)
         csd_epochs = mne.preprocessing.compute_current_source_density(
             epochs, lambda2=1e-5)
-        picks = mne.io.pick.pick_types(csd_epochs.info, csd=True)
+        picks = mne.pick_types(csd_epochs.info, csd=True)
 
     freq = csd_epochs.info['sfreq']
 

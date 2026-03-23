@@ -27,7 +27,7 @@ import numpy as np
 
 import mne
 from mne.utils import logger
-from mne.io.meas_info import Info
+from mne import Info
 from h5io import write_hdf5, read_hdf5
 import h5py
 
