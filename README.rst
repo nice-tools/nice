@@ -2,16 +2,18 @@
 
 `NICE Tools`
 =======================================================
+This is a small modification of NICE alogrithms to be compatible with MNE 1.11
+
 
 Get the latest code
 ^^^^^^^^^^^^^^^^^^^
 
 To get the latest code using git, simply type::
 
-    git clone git://github.com/nice-tools/nice.git
+    git clone git://github.com/JuliaRathmannBloch/nice_MNE_1.11_compatible.git
 
 If you don't have git installed, you can download a zip or tarball
-of the latest code: https://github.com/nice-tools/nice/archives/master
+of the latest code: https://github.com/JuliaRathmannBloch/nice_MNE_1.11_compatible.git
 
 Install nice
 ^^^^^^^^^^^^^^^^^^
